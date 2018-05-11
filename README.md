@@ -1,6 +1,8 @@
 # 2700
 2017.3.1f1
 
+# Sequence
+cf.[PlantUML Extention](https://dev.classmethod.jp/tool/chrome-extension-plantuml-in-github-markdown/)
 
 ```uml
 @startuml
@@ -80,3 +82,4 @@ detach
 endif
 @enduml
 ```
+
