@@ -1,53 +1,63 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// This class manages the choreography of the introduction (first) scene.
 public class IntroductionContentManager : ContentManager {
 
-	public 	AudioSource 	audioDescription;
-	public 	LineRenderer 	stopLine;
+	enum State { DiscriptStart, Discripting, DiscriptEnd }
 
-	private float 			stopLineDisplayTime = 10f;
-	private float 			audioStartTime;
-	private bool 			whenStart;
+	public AudioSource audioDescription;
+	public LineRenderer stopLine;
+
+	private float stopLineDisplayTime = 10f;
+	private float audioStartTime;
+	private State discriptState = State.DiscriptStart;
+
+	public void SetDiscriptEnd(){
+		discriptState = State.DiscriptEnd;
+	}
 
 	protected override void Start () {
 		// get the phase manager
 		base.Start();
 
-		// set a flag to start audio introduction
-		whenStart = audioDescription != null && !audioDescription.isPlaying;
-
 		// enable scene transition
 		sceneTransitionEnabled = true;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		// start description
-		if(whenStart) {
-			audioDescription.Play();
-			audioStartTime = Time.time;
-			whenStart = false;
-		}
 
-		// display stop line
-		var whenDisplayGuideline = stopLine != null && audioDescription.time > stopLineDisplayTime;
+	private void WhenDrawGuideline(){
+		var whenDisplayGuideline = stopLine != null 
+			&& audioDescription.time > stopLineDisplayTime;
 		if(whenDisplayGuideline) {
 			stopLine.enabled = true;
 		}
+	}
 
-		// end introduction
+	private void DiscriptStart(){
+		if(discriptState != State.DiscriptStart) { return; }
+		audioDescription.Play();
+		audioStartTime = Time.time;
+		discriptState = State.Discripting;
+	}
+
+
+	private void Discripting(){
+		if(discriptState != State.Discripting) { return; }
 		float silentTime = 2f;
-		float introductionEndTime = audioStartTime + audioDescription.clip.length + silentTime;
-		if(Time.time > introductionEndTime) {
-			SceneManager.LoadScene(nextPhase);
+		float introductionEndTime 
+			= audioStartTime + audioDescription.clip.length + silentTime;
+		discriptState = Time.time > introductionEndTime
+			? State.Discripting : State.DiscriptEnd;
+	}
 
-		} else {
-			// skip introduction
-			base.SceneSwitch();
-		}
+	private void DiscriptEnd(){
+		if(discriptState != State.DiscriptEnd) { return; }
+		SceneManager.LoadScene(nextPhase);
+	}
 
+	private void Update () {
+		DiscriptStart();
+		WhenDrawGuideline();
+		DiscriptEnd();
 	}
 }

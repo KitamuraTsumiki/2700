@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
 
+// This class manages the choreography of the Guiding (second) scene.
 public class GuidingContentManager : ContentManager {
 
 	protected override void Start () {
@@ -11,8 +9,7 @@ public class GuidingContentManager : ContentManager {
 		
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	private void Update () {
 		// for testing scene transition
 		base.SceneSwitch();
 	}
