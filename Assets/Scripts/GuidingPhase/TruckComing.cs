@@ -12,8 +12,6 @@ public class TruckComing : ContentSubBlock {
 
 	public Transform playerHead;
 	public GameObject truck;
-	public bool hasFinished = false;
-	public bool isInMainRoute = true;
 	public PlayerPosCheckArea playerTargetZone1;
 	public PlayerPosCheckArea playerTargetZone2;
 
