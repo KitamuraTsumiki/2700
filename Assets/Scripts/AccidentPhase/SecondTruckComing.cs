@@ -4,10 +4,8 @@
 /// another truck comes from the lane 2,
 /// and check whether the player is attacked by the truck
 /// </summary>
-public class SecondTruckComing : MonoBehaviour {
+public class SecondTruckComing : ContentSubBlock {
 
-	public bool hasFinished = false;
-	public bool isInMainRoute = true;
 	public SecondTruckActions truckAction;
 	public Transform truckFrontGuide;
 	public Transform playerHead;

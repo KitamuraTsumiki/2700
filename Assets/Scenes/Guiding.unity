@@ -284,6 +284,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f33cc75cd955d73488e62c852fcf4970, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hasFinished: 0
+  isInMainRoute: 1
   truckNotification: {fileID: 201155888}
   playerPosNavigation: {fileID: 1086545276}
   playerHead: {fileID: 253481770}
@@ -303,11 +305,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73775413ff2e7dd4293e552b691d363d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hasFinished: 0
+  isInMainRoute: 1
   cranePosGuide: {fileID: 2005045958}
   playerHead: {fileID: 253481770}
   truckGuide: {fileID: 970522066}
   positionThreshold: 0.8
-  hasFinished: 0
 --- !u!114 &118747775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -320,6 +323,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hasFinished: 0
+  isInMainRoute: 1
+  truckActions: {fileID: 600509426}
 --- !u!114 &118747776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,6 +337,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hasFinished: 0
+  isInMainRoute: 1
   playerHead: {fileID: 253481766}
 --- !u!114 &118747777
 MonoBehaviour:

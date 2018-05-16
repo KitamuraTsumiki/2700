@@ -81,6 +81,7 @@ public class GuidingContentManager : ContentManager {
 
 		// split the route
 		if(!secondTruckFound.hasFinished) { return; }
+		secondTruckFound.enabled = false;
 		if(secondTruckFound.isInMainRoute) {
 			state = State.SecondTruckComing;
 		} else {
@@ -93,6 +94,7 @@ public class GuidingContentManager : ContentManager {
 
 		// split the route
 		if (!secondTruckComing.hasFinished){ return; }
+		secondTruckComing.enabled = false;
 		if(secondTruckComing.isInMainRoute) {
 			state = State.SecondTruckHits;
 		} else {
@@ -104,6 +106,7 @@ public class GuidingContentManager : ContentManager {
 		if(state != State.SecondTruckHits) { return;}
 		if(secondTruckHits.hasFinished) {
 			// move on "replay" phase
+			secondTruckHits.enabled = false;
 		}
 	}
 
@@ -111,6 +114,7 @@ public class GuidingContentManager : ContentManager {
 		if(state != State.SecondTruckStops) { return;}
 		if(secondTruckStops.hasFinished) {
 			// move on "instruction" phase
+			secondTruckStops.enabled = false;
 		}
 	}
 }

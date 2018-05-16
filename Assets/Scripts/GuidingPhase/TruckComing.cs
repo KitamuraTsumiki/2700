@@ -3,7 +3,7 @@
 /// This manages the first block of Guiding (second) part;
 /// a truck is coming from lane 3
 /// </summary>
-public class TruckComing : MonoBehaviour {
+public class TruckComing : ContentSubBlock {
 
 	enum TruckComingState {displayTruckNotification, truckIsComing, checkPlayerPosition}
 

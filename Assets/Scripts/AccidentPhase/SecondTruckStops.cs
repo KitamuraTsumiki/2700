@@ -3,9 +3,8 @@
 /// This manages the third block of the Accident (third) phase;
 /// the truck stops before hit the player
 /// </summary>
-public class SecondTruckStops : MonoBehaviour {
+public class SecondTruckStops : ContentSubBlock {
 
-	public bool hasFinished = false;
 	public SecondTruckActions truckActions;
 
 	private void Start () {

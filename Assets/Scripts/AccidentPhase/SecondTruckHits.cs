@@ -3,9 +3,8 @@
 /// This manages the third block of the Accident (third) phase;
 /// The truck hits the player
 /// </summary>
-public class SecondTruckHits : MonoBehaviour {
+public class SecondTruckHits : ContentSubBlock {
 
-	public bool hasFinished = false;
 	public GameObject playerHead;
 
 	private Rigidbody playerRbd;

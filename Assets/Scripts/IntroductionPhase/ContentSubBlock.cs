@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class ContentSubBlock : MonoBehaviour {
 
-	public bool isInside = false;
+	public bool hasFinished = false;
+	public bool isInMainRoute = true;
 
+	public virtual void InitUI(){
+		
+	}
 }

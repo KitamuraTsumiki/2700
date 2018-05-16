@@ -4,13 +4,12 @@
 /// This manages the third block of the Guiding (second) part;
 /// The truck stops at correct position
 /// </summary>
-public class TruckStops : MonoBehaviour {
+public class TruckStops : ContentSubBlock {
 
 	public Transform cranePosGuide;
 	public Transform playerHead;
 	public Transform truckGuide;
 	public float positionThreshold = 0.8f;
-	public bool hasFinished = false;
 
 	private void Update () {
 		RecognizeTruck();

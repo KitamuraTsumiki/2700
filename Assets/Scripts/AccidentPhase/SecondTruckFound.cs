@@ -3,10 +3,8 @@
 /// This manages the first block of the Accident (third) phase;
 /// check whether the player finds the second truck
 /// </summary>
-public class SecondTruckFound : MonoBehaviour {
+public class SecondTruckFound : ContentSubBlock {
 
-	public bool hasFinished = false;
-	public bool isInMainRoute = true;
 	public float truckCheckPeriod = 3f;
 	public Transform playerHead;
 	public Transform truck;
