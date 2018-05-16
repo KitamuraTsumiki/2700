@@ -4,13 +4,24 @@
 /// </summary>
 public class CameraTransform : MonoBehaviour {
 
-	public float rotationMul = 0.01f;
-	public float translateMul = 0.01f;
+	public float rotationMul = 1f;
+	public float translateMul = 1f;
 
 	private void Update () {
-		var x = Input.GetAxis("Horizontal") * Time.deltaTime * rotationMul;
-		var z = Input.GetAxis("Vertical") * Time.deltaTime * translateMul;
+		CameraTranslate();
+		CameraRotation();
 	}
 
+	private void CameraTranslate(){
+		float x = Input.GetAxis("Horizontal") * Time.deltaTime * translateMul;
+		float z = Input.GetAxis("Vertical") * Time.deltaTime * translateMul;
 
+		gameObject.transform.Translate(new Vector3(x, 0f, z));
+	}
+
+	private void CameraRotation(){
+		float horizontal = Input.GetAxis("Mouse X") * rotationMul;
+
+		gameObject.transform.Rotate(new Vector3(0f, horizontal, 0f));
+	}
 }
