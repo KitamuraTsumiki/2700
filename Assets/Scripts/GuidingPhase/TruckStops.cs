@@ -6,11 +6,30 @@
 /// </summary>
 public class TruckStops : MonoBehaviour {
 
-	void Start () {
-		
+	public Transform cranePosGuide;
+	public Transform playerHead;
+	public Transform truckGuide;
+	public float positionThreshold = 0.8f;
+	public bool hasFinished = false;
+
+	private void Update () {
+		RecognizeTruck();
 	}
-	
-	void Update () {
-		
+
+
+	private void RecognizeTruck(){
+		// check whether the player recognize that the truck stops
+		// at the correct position in the lane 1
+		// by alignment of position of the truck, the crane and the player
+		float totalPosDiff = Mathf.Abs(playerHead.position.z - cranePosGuide.position.z)
+			+ Mathf.Abs(truckGuide.position.z - cranePosGuide.position.z);
+
+		Debug.Log("totalPosDiff: " + totalPosDiff);
+
+		var isAligned = totalPosDiff < positionThreshold;
+		if(isAligned) {
+			Debug.Log("TruckStops has finished");
+			hasFinished = true;
+		}
 	}
 }

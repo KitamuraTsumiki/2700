@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// This class manages the choreography of the Guiding (second) scene.
@@ -51,5 +52,11 @@ public class GuidingContentManager : ContentManager {
 	private void TruckStops(){
 		if(guidingState != GuidingState.TruckStops) { return;}
 		truckStops.enabled = true;
+
+		if(truckStops.hasFinished) {
+			// move on the next phase "Accident"
+			truckStops.enabled = false;
+			SceneManager.LoadScene(nextPhase);
+		}
 	}
 }
