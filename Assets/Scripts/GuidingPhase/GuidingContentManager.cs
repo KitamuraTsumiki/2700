@@ -19,6 +19,8 @@ public class GuidingContentManager : ContentManager {
 	public SecondTruckHits secondTruckHits;
 	public SecondTruckStops secondTruckStops;
 
+	public GameObject playerHead;
+
 	private State state;
 
 
@@ -30,6 +32,9 @@ public class GuidingContentManager : ContentManager {
 		// Turn all UI canvases off
 		truckComing.InitUI();
 
+		// Initialize player's rigid body status
+		InitPlayerRbd();
+
 		// deactivate all story block managers
 		truckComing.enabled = false;
 		truckStops.enabled = false;
@@ -38,7 +43,15 @@ public class GuidingContentManager : ContentManager {
 		secondTruckHits.enabled = false;
 		secondTruckStops.enabled = false;
 	}
-	
+
+	private void InitPlayerRbd(){
+		Rigidbody playerRbd = playerHead.GetComponent<Rigidbody>();
+		if(playerRbd != null) {
+			playerRbd.isKinematic = true;
+			playerRbd.useGravity = false;
+		}
+	}
+
 	private void Update () {
 		// call each step of the story
 		TruckComing();

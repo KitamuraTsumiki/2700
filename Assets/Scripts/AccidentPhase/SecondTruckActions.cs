@@ -16,7 +16,6 @@ public class SecondTruckActions : MonoBehaviour {
 
 	private void Start () {
 		truckAnimation = GetComponent<Animator>();
-		truckSoundBeforeHit = GetComponent<AudioSource>();
 	}
 	
 	private void Update () {
