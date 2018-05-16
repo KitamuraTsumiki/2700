@@ -8,19 +8,26 @@ public class TruckComing : MonoBehaviour {
 	enum TruckComingState {displayTruckNotification, truckIsComing, checkPlayerPosition}
 
 	public CanvasGroup truckNotification;
+	public CanvasGroup playerPosNavigation;
 
 	public Transform playerHead;
 	public GameObject truck;
 	public bool hasFinished = false;
-	public PlayerPosCheckArea playerTargetZone;
+	public bool isInMainRoute = true;
+	public PlayerPosCheckArea playerTargetZone1;
+	public PlayerPosCheckArea playerTargetZone2;
 
 	private TruckComingState truckComingState;
 	private Animator truckAnimation;
 	private string truckComingAnimState = "Truck02_coming";
 
+	public void InitUI(){
+		truckNotification.alpha = 0f;
+		playerPosNavigation.alpha = 0f;
+	}
+
 	private void Start () {
 		truckComingState = TruckComingState.displayTruckNotification;
-		truckNotification.alpha = 0f;
 		truckAnimation = truck.GetComponent<Animator>();
 	}
 	
@@ -45,15 +52,14 @@ public class TruckComing : MonoBehaviour {
 	}
 
 	private bool playerSawTruck(){
-		float viewDirThreshold = 0.5f;
-		Vector3 truckDir = truck.transform.position
-			- new Vector3(playerHead.position.x, truck.transform.position.y, playerHead.position.z);
+		float viewDirThreshold = 0.1f;
+		Vector3 truckDir = Vector3.Normalize(truck.transform.position
+			- new Vector3(playerHead.position.x, truck.transform.position.y, playerHead.position.z));
+		Vector3 viewAngle = playerHead.transform.forward.normalized;
 
-		float viewAngleDotTruckDir = Vector3.Dot(playerHead.rotation.eulerAngles, truckDir);
+		float viewAngleDotTruckDir = Vector3.Dot(viewAngle, truckDir);
 
-		Debug.Log("Dot product of view angle and truck direction" + viewAngleDotTruckDir);
-		
-		return viewAngleDotTruckDir < viewDirThreshold;
+		return viewAngleDotTruckDir > viewDirThreshold;
 	}
 
 	private void TruckIsComing (){
@@ -66,11 +72,30 @@ public class TruckComing : MonoBehaviour {
 
 	}
 
+	private void DisplayPlayerPosNavigation (){
+		// if the player is outside of the target zone,
+		// display truck notification
+		playerPosNavigation.alpha = Mathf.Min(playerPosNavigation.alpha + Time.deltaTime, 1f);
+	} 
+
 	private void CheckPlayerPosition(){
 		if(truckComingState != TruckComingState.checkPlayerPosition) { return; }
 
-		if(!playerTargetZone.isInside) {
-			// move on the next "TruckStop" (second) block in this phase
+		if(!playerTargetZone1.isInside) {
+			DisplayPlayerPosNavigation();
+		}
+
+		if(playerTargetZone2.isInside) {
+			// move on the next block "TruckStops"
+			Debug.Log("TruckComing has finished (main route)");
+			hasFinished = true;
+		} else {
+			// the following process is executed after displaying player position navigation
+			if (playerPosNavigation.alpha < 1){return;}
+
+			// move on "Instruction of correct navigation position"
+			Debug.Log("TruckComing has finished (to instruction phase)");
+			isInMainRoute = false;
 			hasFinished = true;
 		}
 	}

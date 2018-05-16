@@ -7,14 +7,13 @@ public class PlayerPosCheckArea : MonoBehaviour {
 
 	public bool isInside = false;
 
-	void OnTriggerEnter(Collider other){
-		// check whether player's head enters the area
-		if (other.CompareTag("MainCamera")){
+	private void OnTriggerStay(Collider other){
+		if(other.CompareTag("MainCamera") && !isInside) {
 			isInside = true;
 		}
 	}
 
-	void OnTriggerExit(Collider other){
+	private void OnTriggerExit(Collider other){
 		// check whether player's head exits the area
 		if (other.CompareTag("MainCamera")){
 			isInside = true;
