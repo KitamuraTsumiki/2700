@@ -29,7 +29,6 @@ public class TruckStops : MonoBehaviour {
 		var isAligned = totalPosDiff < positionThreshold;
 		if(isAligned) {
 			Debug.Log("TruckStops has finished");
-			hasFinished = true;
 		}
 	}
 }
