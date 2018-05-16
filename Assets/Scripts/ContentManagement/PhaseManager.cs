@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Phase manager manages three divided phases of whole content.
+/// </summary>
+
 public class PhaseManager : MonoBehaviour {
 
 	public static PhaseManager singleton;

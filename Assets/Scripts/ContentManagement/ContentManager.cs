@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// This is the parent of all "ContentsManager" class, 
-// which manages responsible scene of each of them.
+/// <summary>
+/// This is the parent of all "ContentsManager" class, 
+/// which manages responsible scene of each of them.
+/// </summary>
 public class ContentManager : MonoBehaviour {
 
 	public PhaseManager phaseManager;
