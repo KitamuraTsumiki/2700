@@ -16,7 +16,7 @@ public class PlayerPosCheckArea : MonoBehaviour {
 	private void OnTriggerExit(Collider other){
 		// check whether player's head exits the area
 		if (other.CompareTag("MainCamera")){
-			isInside = true;
+			isInside = false;
 		}
 	}
 }

@@ -9,12 +9,11 @@ public class TruckStops : ContentSubBlock {
 	public Transform cranePosGuide;
 	public Transform playerHead;
 	public Transform truckGuide;
-	public float positionThreshold = 0.8f;
+	public GameObject secondTruck;
 
 	private void Update () {
 		RecognizeTruck();
 	}
-
 
 	private void RecognizeTruck(){
 		// check whether the player recognize that the truck stops
@@ -23,11 +22,14 @@ public class TruckStops : ContentSubBlock {
 		float totalPosDiff = Mathf.Abs(playerHead.position.z - cranePosGuide.position.z)
 			+ Mathf.Abs(truckGuide.position.z - cranePosGuide.position.z);
 
-		Debug.Log("totalPosDiff: " + totalPosDiff);
+		Debug.Log("TruckStops totalPosDiff: " + totalPosDiff);
 
+		float positionThreshold = 0.8f;
 		var isAligned = totalPosDiff < positionThreshold;
 		if(isAligned) {
 			Debug.Log("TruckStops has finished");
+			secondTruck.SetActive(true);
+			hasFinished = true;
 		}
 	}
 }

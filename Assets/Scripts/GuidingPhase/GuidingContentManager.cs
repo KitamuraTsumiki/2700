@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class GuidingContentManager : ContentManager {
 
-	enum State { FirstTruckComing, FirstTruckStops, SecondTruckFound, SecondTruckComing, SecondTruckHits, SecondTruckStops }
+	enum State { FirstTruckComing, FirstTruckStops, SecondTruckFound, SecondTruckComing, SecondTruckStops1, SecondTruckHits, SecondTruckStops2 }
 
 	// Contents of guiding (second) phase
 	public TruckComing truckComing;
@@ -16,8 +16,9 @@ public class GuidingContentManager : ContentManager {
 	// Contents of accident (third) phase
 	public SecondTruckFound secondTruckFound;
 	public SecondTruckComing secondTruckComing;
+	public SecondTruckStops1 secondTruckStops1;
 	public SecondTruckHits secondTruckHits;
-	public SecondTruckStops secondTruckStops;
+	public SecondTruckStops2 secondTruckStops2;
 
 	public GameObject playerHead;
 
@@ -40,8 +41,9 @@ public class GuidingContentManager : ContentManager {
 		truckStops.enabled = false;
 		secondTruckFound.enabled = false;
 		secondTruckComing.enabled = false;
+		secondTruckStops1.enabled = false;
 		secondTruckHits.enabled = false;
-		secondTruckStops.enabled = false;
+		secondTruckStops2.enabled = false;
 	}
 
 	private void InitPlayerRbd(){
@@ -58,8 +60,11 @@ public class GuidingContentManager : ContentManager {
 		TruckStops();
 		SecondTruckFound();
 		SecondTruckComing();
+		SecondTruckStops1();
 		SecondTruckHits();
-		SecondTruckStops();
+		SecondTruckStops2();
+
+		Debug.Log(state);
 
 		// for testing scene transition
 		base.SceneSwitch();
@@ -73,7 +78,7 @@ public class GuidingContentManager : ContentManager {
 			// move on the next "TruckStop" (second) block in this phase
 			truckComing.enabled = false;
 			state = State.FirstTruckStops;
-		} else {
+
 			// move on "Instruction of correct position for navigation of trucks"
 		}
 	}
@@ -98,12 +103,13 @@ public class GuidingContentManager : ContentManager {
 		if(secondTruckFound.isInMainRoute) {
 			state = State.SecondTruckComing;
 		} else {
-			state = State.SecondTruckStops;
+			state = State.SecondTruckStops1;
 		}
 	}
 
 	protected void SecondTruckComing(){
 		if(state != State.SecondTruckComing) { return;}
+		secondTruckComing.enabled = true;
 
 		// split the route
 		if (!secondTruckComing.hasFinished){ return; }
@@ -111,23 +117,38 @@ public class GuidingContentManager : ContentManager {
 		if(secondTruckComing.isInMainRoute) {
 			state = State.SecondTruckHits;
 		} else {
-			state = State.SecondTruckStops;
+			state = State.SecondTruckStops2;
 		}
 	}
 
+	protected void SecondTruckStops1(){
+		if(state != State.SecondTruckStops1) { return;}
+		secondTruckStops1.enabled = true;
+
+		if(secondTruckStops1.hasFinished) {
+			// move on "instruction" phase
+			secondTruckStops1.enabled = false;
+		}
+	}
+
+
 	protected void SecondTruckHits(){
 		if(state != State.SecondTruckHits) { return;}
+		secondTruckHits.enabled = true;
+
 		if(secondTruckHits.hasFinished) {
 			// move on "replay" phase
 			secondTruckHits.enabled = false;
 		}
 	}
 
-	protected void SecondTruckStops(){
-		if(state != State.SecondTruckStops) { return;}
-		if(secondTruckStops.hasFinished) {
+	protected void SecondTruckStops2(){
+		if(state != State.SecondTruckStops2) { return;}
+		secondTruckStops2.enabled = true;
+
+		if(secondTruckStops2.hasFinished) {
 			// move on "instruction" phase
-			secondTruckStops.enabled = false;
+			secondTruckStops2.enabled = false;
 		}
 	}
 }

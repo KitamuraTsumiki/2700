@@ -3,16 +3,12 @@
 /// This manages the third block of the Accident (third) phase;
 /// the truck stops before hit the player
 /// </summary>
-public class SecondTruckStops : ContentSubBlock {
+public class SecondTruckStops2 : ContentSubBlock {
 
 	public SecondTruckActions truckActions;
 
-	private void Start () {
-		
-	}
-	
 	private void Update () {
-		
+		ActivateTruckActions();
 	}
 
 	private void ActivateTruckActions(){
@@ -21,7 +17,7 @@ public class SecondTruckStops : ContentSubBlock {
 		// when the audio clip on the "truckActions" finish,
 		// end this block of the story
 		if (!truckActions.truckSoundAfterHit.isPlaying){
-			hasFinished = false;
+			hasFinished = true;
 		}
 	}
 }
