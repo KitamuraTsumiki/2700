@@ -17,26 +17,30 @@ public class SecondTruckFound : ContentSubBlock {
 
 	private void Update () {
 		CheckTruckRecognition();
-		ActivateTruckAction();
 	}
 
 	private void CheckTruckRecognition(){
+		bool willTruckHit = true;
+
 		if(PlayerSawTruck()) {
 			// move on instruction phase
 			Debug.Log("SecondTruckFound has finished (instruction route)");
+			willTruckHit = false;
+			ActivateTruckAction(willTruckHit);
 			isInMainRoute = false;
 			hasFinished = true;
 		}
 
-		if (Time.time > truckCheckDeadline){
+		if (Time.time > truckCheckDeadline){ // if the player doesn't notice the second truck
 			// move on "SecondTruckComing"
 			Debug.Log("SecondTruckFound has finished (main route)");
+			ActivateTruckAction(willTruckHit);
 			hasFinished = true;
 		}
 	}
 
 	private bool PlayerSawTruck(){
-		float viewDirThreshold = 0.1f;
+		float viewDirThreshold = 0.5f;
 		Vector3 truckDir = Vector3.Normalize(truck.transform.position
 			- new Vector3(playerHead.position.x, truck.transform.position.y, playerHead.position.z));
 		Vector3 viewAngle = playerHead.transform.forward.normalized;
@@ -46,8 +50,10 @@ public class SecondTruckFound : ContentSubBlock {
 		return viewAngleDotTruckDir > viewDirThreshold;
 	}
 
-	private void ActivateTruckAction(){
+	private void ActivateTruckAction(bool _willHit){
 		SecondTruckActions truckActions = truck.GetComponent<SecondTruckActions>();
+
+		truckActions.isGoingToHit = _willHit;
 
 		if(!truckActions.isActive) {
 			truckActions.isActive = true;

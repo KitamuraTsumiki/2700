@@ -6,35 +6,39 @@
 public class SecondTruckActions : MonoBehaviour {
 
 	public bool isActive = false;
-	public bool hitting = false;
+	public bool isGoingToHit = false;
+	public bool isContacting = false;
 	public AudioSource truckSoundBeforeHit;
 	public AudioSource truckSoundAfterHit;
 	public GuidingContentManager contentManager;
 	private Animator truckAnimation;
-	private string truckComingAnimState = "Truck_Lane2_Hit";
-
+	private string truckAnimHit = "Truck_Lane2_Hit";
+	private string truckAnimStop = "Truck_Lane2_Stop";
 
 	private void Start () {
 		truckAnimation = GetComponent<Animator>();
+		gameObject.SetActive(false);
 	}
 	
 	private void Update () {
-		if(contentManager.secondTruckComing.enabled) {
+		if(!isActive) { return; }
+
+		var activateTruckActions = contentManager.secondTruckComing.enabled || contentManager.secondTruckStops1;
+		if(activateTruckActions) {
 			ActivateActionsBeforeHit();
 		}
 	}
 
 	private void ActivateActionsBeforeHit(){
-		// activate car horn, brake sound
-		if(truckSoundBeforeHit.clip != null) {
-			truckSoundBeforeHit.Play();
-		}
-
 		// animate the truck
-		truckAnimation.Play(truckComingAnimState);
-
-		if(!hitting) {
-			// cross fade the animation to "stopping" one slightly
+		if(isGoingToHit) {
+			truckAnimation.Play(truckAnimHit);
+			// activate car horn, brake sound
+			if(truckSoundBeforeHit.clip != null) {
+				truckSoundBeforeHit.Play();
+			}
+		} else {
+			truckAnimation.Play(truckAnimStop);
 		}
 	}
 
@@ -48,7 +52,7 @@ public class SecondTruckActions : MonoBehaviour {
 	private void OnCollisionEnter(Collision collision){
 		// when the collider contacts player's head, "hitting" is activated
 		if(collision.gameObject.tag == "MainCamera") {
-			hitting = true;
+			isContacting = true;
 		}
 	}
 }

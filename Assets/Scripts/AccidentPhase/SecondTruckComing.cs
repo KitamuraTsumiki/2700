@@ -11,20 +11,18 @@ public class SecondTruckComing : ContentSubBlock {
 	public Transform playerHead;
 
 	private void Update () {
-		var truckHasPassed = truckFrontGuide.position.z - playerHead.position.z > 0f;
-
-		if(!truckHasPassed) { return; }
+		
 		CheckPlayerTruckContact();
 	}
 
-
-
 	private void CheckPlayerTruckContact(){
-		if(truckAction.hitting) {
+		var truckHasPassed = truckFrontGuide.position.z - playerHead.position.z > 0f;
+
+		if(truckAction.isContacting) {
 			// move on "SecondTruckHits"
 			Debug.Log("SecondTruckComing has finished (main route)");
 			hasFinished = true;
-		} else {
+		} else if (!truckAction.isContacting && truckHasPassed){
 			// move on "SecondTruckStops"
 			Debug.Log("SecondTruckComing has finished (SecondTruckStops)");
 			isInMainRoute = false;
