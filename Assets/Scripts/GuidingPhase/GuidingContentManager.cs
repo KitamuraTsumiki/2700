@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /// <summary>
 /// This class manages the choreography of the Guiding (second) scene.
@@ -7,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 public class GuidingContentManager : ContentManager {
 
-	enum State { FirstTruckComing, FirstTruckStops, SecondTruckFound, SecondTruckComing, SecondTruckStops1, SecondTruckHits, SecondTruckStops2 }
+	enum State { FirstTruckComing, FirstTruckStops, SecondTruckFound, SecondTruckComing, SecondTruckStops1, SecondTruckHits, SecondTruckStops2, InstructNavigation }
 
 	// Contents of guiding (second) phase
 	public TruckComing truckComing;
@@ -22,6 +23,8 @@ public class GuidingContentManager : ContentManager {
 
 	public GameObject playerHead;
 
+	public Text typeOfEnding;
+
 	private State state;
 
 
@@ -35,6 +38,9 @@ public class GuidingContentManager : ContentManager {
 
 		// Initialize player's rigid body status
 		InitPlayerRbd();
+
+		// Initialize "type of ending" UI panel (for prototyping)
+		InitTypeOfEndDisplay();
 
 		// deactivate all story block managers
 		truckComing.enabled = false;
@@ -54,9 +60,14 @@ public class GuidingContentManager : ContentManager {
 		}
 	}
 
+	private void InitTypeOfEndDisplay(){
+		typeOfEnding.text = "";
+	}
+
 	private void Update () {
 		// call each step of the story
 		TruckComing();
+		InstructNavigation();
 		TruckStops();
 		SecondTruckFound();
 		SecondTruckComing();
@@ -74,14 +85,24 @@ public class GuidingContentManager : ContentManager {
 		if(state != State.FirstTruckComing) { return;}
 		truckComing.enabled = true;
 
-		if(truckComing.hasFinished) {
+		if(!truckComing.hasFinished) { return; }
+		if(truckComing.isInMainRoute) {
 			// move on the next "TruckStop" (second) block in this phase
 			truckComing.enabled = false;
 			state = State.FirstTruckStops;
-
+		} else{
 			// move on "Instruction of correct position for navigation of trucks"
+			truckComing.enabled = false;
+			state = State.InstructNavigation;
 		}
 	}
+
+	private void InstructNavigation(){
+		if(state != State.InstructNavigation) { return;}
+		// move on "Instruction of correct position for navigation of trucks"
+		typeOfEnding.text = "正しい誘導位置の講習フェイズへ";
+	}
+
 	private void TruckStops(){
 		if(state != State.FirstTruckStops) { return;}
 		truckStops.enabled = true;
@@ -128,6 +149,7 @@ public class GuidingContentManager : ContentManager {
 		if(secondTruckStops1.hasFinished) {
 			// move on "instruction" phase
 			secondTruckStops1.enabled = false;
+			typeOfEnding.text = "講習フェイズへ";
 		}
 	}
 
@@ -139,6 +161,7 @@ public class GuidingContentManager : ContentManager {
 		if(secondTruckHits.hasFinished) {
 			// move on "replay" phase
 			secondTruckHits.enabled = false;
+			typeOfEnding.text = "リプレイフェイズへ";
 		}
 	}
 
@@ -149,6 +172,7 @@ public class GuidingContentManager : ContentManager {
 		if(secondTruckStops2.hasFinished) {
 			// move on "instruction" phase
 			secondTruckStops2.enabled = false;
+			typeOfEnding.text = "講習フェイズへ";
 		}
 	}
 }
