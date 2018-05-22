@@ -17,7 +17,9 @@ public class IntroductionContentManager : ContentManager {
 	private State discriptState = State.DiscriptStart;
 
 	public void SetDiscriptEnd(){
-		discriptState = State.DiscriptEnd;
+		if(Input.GetKeyDown(KeyCode.Space)) {
+			discriptState = State.DiscriptEnd;
+		}
 	}
 
 	protected override void Start () {
@@ -38,9 +40,12 @@ public class IntroductionContentManager : ContentManager {
 
 	private void DiscriptStart(){
 		if(discriptState != State.DiscriptStart) { return; }
-		audioDescription.Play();
-		audioStartTime = Time.time;
-		discriptState = State.Discribing;
+		if(!audioDescription.isPlaying) {
+			audioDescription.Play();
+			audioStartTime = Time.time;
+			discriptState = State.Discribing;
+		}
+
 	}
 
 
@@ -50,7 +55,7 @@ public class IntroductionContentManager : ContentManager {
 		float introductionEndTime 
 			= audioStartTime + audioDescription.clip.length + silentTime;
 		discriptState = Time.time > introductionEndTime
-			? State.Discribing : State.DiscriptEnd;
+			? State.DiscriptEnd : State.Discribing;
 	}
 
 	private void DiscriptEnd(){
@@ -59,9 +64,11 @@ public class IntroductionContentManager : ContentManager {
 	}
 
 	private void Update () {
+		Debug.Log("discription state: " + discriptState);
 		DiscriptStart();
 		Discripting();
 		WhenDrawGuideline();
+		SetDiscriptEnd();
 		DiscriptEnd();
 	}
 }
