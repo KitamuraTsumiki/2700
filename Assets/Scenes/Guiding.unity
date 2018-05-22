@@ -201,7 +201,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &81222395
 Transform:
   m_ObjectHideFlags: 0
@@ -898,11 +898,11 @@ Rigidbody:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 253481766}
   serializedVersion: 2
-  m_Mass: 3
+  m_Mass: 60
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -979,7 +979,6 @@ GameObject:
   m_Component:
   - component: {fileID: 455321383}
   - component: {fileID: 455321387}
-  - component: {fileID: 455321386}
   - component: {fileID: 455321385}
   - component: {fileID: 455321384}
   m_Layer: 0
@@ -1051,7 +1050,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 1
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1116,18 +1115,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!135 &455321386
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 455321382}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &455321387
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1531,12 +1518,12 @@ Prefab:
     - target: {fileID: 65579056166628550, guid: 3c4349c2d9c94e6489c12012b90bb4f3,
         type: 2}
       propertyPath: m_Size.z
-      value: 2.3945804
+      value: 2.717548
       objectReference: {fileID: 0}
     - target: {fileID: 65579056166628550, guid: 3c4349c2d9c94e6489c12012b90bb4f3,
         type: 2}
       propertyPath: m_Center.z
-      value: 0.51648545
+      value: 0.6779692
       objectReference: {fileID: 0}
     - target: {fileID: 65579056166628550, guid: 3c4349c2d9c94e6489c12012b90bb4f3,
         type: 2}
@@ -1578,6 +1565,21 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!54 &600509425
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 600509422}
+  serializedVersion: 2
+  m_Mass: 1000
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &600509426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1905,7 +1907,6 @@ GameObject:
   m_Component:
   - component: {fileID: 970522066}
   - component: {fileID: 970522069}
-  - component: {fileID: 970522068}
   - component: {fileID: 970522067}
   m_Layer: 0
   m_Name: FirstTruckPosGuide
@@ -1961,18 +1962,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!135 &970522068
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 970522065}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &970522069
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2173,7 +2162,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1158525243}
   - component: {fileID: 1158525242}
-  - component: {fileID: 1158525241}
   - component: {fileID: 1158525240}
   m_Layer: 0
   m_Name: TargetZoneGuide
@@ -2216,18 +2204,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &1158525241
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1158525239}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &1158525242
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3419,7 +3395,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 1
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0

@@ -50,6 +50,7 @@ public class SecondTruckActions : MonoBehaviour {
 	}
 
 	private void OnCollisionEnter(Collision collision){
+		Debug.Log("collision with: " + collision.gameObject);
 		// when the collider contacts player's head, "hitting" is activated
 		if(collision.gameObject.tag == "MainCamera") {
 			isContacting = true;

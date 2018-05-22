@@ -11,7 +11,6 @@ public class SecondTruckComing : ContentSubBlock {
 	public Transform playerHead;
 
 	private void Update () {
-		
 		CheckPlayerTruckContact();
 	}
 
