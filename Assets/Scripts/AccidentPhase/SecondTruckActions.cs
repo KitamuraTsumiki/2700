@@ -54,6 +54,9 @@ public class SecondTruckActions : MonoBehaviour {
 		// when the collider contacts player's head, "hitting" is activated
 		if(collision.gameObject.tag == "MainCamera") {
 			isContacting = true;
+			Rigidbody rbd = GetComponent<Rigidbody>();
+			rbd.isKinematic = true;
+			rbd.useGravity = false;
 		}
 	}
 }
