@@ -294,8 +294,7 @@ MonoBehaviour:
   playerPosNavigation: {fileID: 1086545276}
   playerHead: {fileID: 253481770}
   truck: {fileID: 1777644615}
-  playerTargetZone1: {fileID: 1378360130}
-  playerTargetZone2: {fileID: 1651349026}
+  playerTargetZone: {fileID: 1651349026}
 --- !u!114 &118747774
 MonoBehaviour:
   m_ObjectHideFlags: 0

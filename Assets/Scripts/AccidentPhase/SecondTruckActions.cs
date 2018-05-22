@@ -11,6 +11,8 @@ public class SecondTruckActions : MonoBehaviour {
 	public AudioSource truckSoundBeforeHit;
 	public AudioSource truckSoundAfterHit;
 	public GuidingContentManager contentManager;
+	private bool soundBeforeHitPlayed = false;
+	private bool soundAfterHitPlayed = false;
 	private Animator truckAnimation;
 	private string truckAnimHit = "Truck_Lane2_Hit";
 	private string truckAnimStop = "Truck_Lane2_Stop";
@@ -23,7 +25,7 @@ public class SecondTruckActions : MonoBehaviour {
 	private void Update () {
 		if(!isActive) { return; }
 
-		var activateTruckActions = contentManager.secondTruckComing.enabled || contentManager.secondTruckStops1;
+		var activateTruckActions = contentManager.secondTruckComing.enabled;
 		if(activateTruckActions) {
 			ActivateActionsBeforeHit();
 		}
@@ -34,8 +36,10 @@ public class SecondTruckActions : MonoBehaviour {
 		if(isGoingToHit) {
 			truckAnimation.Play(truckAnimHit);
 			// activate car horn, brake sound
-			if(truckSoundBeforeHit.clip != null) {
+			var soundMustBePlayed = truckSoundBeforeHit.clip != null && !truckSoundBeforeHit.isPlaying && !soundBeforeHitPlayed;
+			if(soundMustBePlayed) {
 				truckSoundBeforeHit.Play();
+				soundBeforeHitPlayed = true;
 			}
 		} else {
 			truckAnimation.Play(truckAnimStop);
@@ -44,8 +48,10 @@ public class SecondTruckActions : MonoBehaviour {
 
 	public void ActivateActionsAfterHit(){
 		// activate sound
-		if(truckSoundAfterHit.clip != null) {
+		var soundMustBePlayed = truckSoundAfterHit.clip != null && !truckSoundAfterHit.isPlaying && !soundAfterHitPlayed;
+		if(soundMustBePlayed) {
 			truckSoundAfterHit.Play();
+			soundAfterHitPlayed = true;
 		}
 	}
 
