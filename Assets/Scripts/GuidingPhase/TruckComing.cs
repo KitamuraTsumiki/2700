@@ -46,6 +46,7 @@ public class TruckComing : ContentSubBlock {
             //modify position and rotation of the display
             truckNotification.transform.position = truckNotificationAnchor.position;
             truckNotification.transform.LookAt(playerHead);
+            truckNotification.transform.Rotate(Vector3.up, 180f);
             return;
         }
 
