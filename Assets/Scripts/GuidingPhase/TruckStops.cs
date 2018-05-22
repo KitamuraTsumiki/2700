@@ -22,8 +22,6 @@ public class TruckStops : ContentSubBlock {
 		float totalPosDiff = Mathf.Abs(playerHead.position.z - cranePosGuide.position.z)
 			+ Mathf.Abs(truckGuide.position.z - cranePosGuide.position.z);
 
-		Debug.Log("TruckStops totalPosDiff: " + totalPosDiff);
-
 		float positionThreshold = 0.8f;
 		var isAligned = totalPosDiff < positionThreshold;
 		if(isAligned) {
