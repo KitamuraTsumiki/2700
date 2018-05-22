@@ -12,8 +12,7 @@ public class TruckComing : ContentSubBlock {
 
 	public Transform playerHead;
 	public GameObject truck;
-	public PlayerPosCheckArea playerTargetZone1;
-	public PlayerPosCheckArea playerTargetZone2;
+	public PlayerPosCheckArea playerTargetZone;
 
 	private TruckComingState truckComingState;
 	private Animator truckAnimation;
@@ -79,21 +78,18 @@ public class TruckComing : ContentSubBlock {
 	private void CheckPlayerPosition(){
 		if(truckComingState != TruckComingState.checkPlayerPosition) { return; }
 
-		if(!playerTargetZone1.isInside) {
+		if(!playerTargetZone.isInside) {
 			DisplayPlayerPosNavigation();
-		}
 
-		if(playerTargetZone2.isInside) {
-			// move on the next block "TruckStops"
-			Debug.Log("TruckComing has finished (main route)");
-			hasFinished = true;
-		} else {
 			// the following process is executed after displaying player position navigation
-			if (playerPosNavigation.alpha < 1){return;}
-
+			if(playerPosNavigation.alpha < 1) { return; }
 			// move on "Instruction of correct navigation position"
 			Debug.Log("TruckComing has finished (to instruction phase)");
 			isInMainRoute = false;
+			hasFinished = true;
+		} else {
+			// move on the next block "TruckStops"
+			Debug.Log("TruckComing has finished (main route)");
 			hasFinished = true;
 		}
 	}
