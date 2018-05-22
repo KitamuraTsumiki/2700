@@ -12,6 +12,7 @@ public class TruckComing : ContentSubBlock {
 
 	public GameObject truck;
 	public PlayerPosCheckArea playerTargetZone;
+    public Transform truckNotificationAnchor;
 
 	private Transform playerHead;
 	private TruckComingState truckComingState;
@@ -40,6 +41,13 @@ public class TruckComing : ContentSubBlock {
 
 		// display the notification ("the truck is coming")
 		truckNotification.alpha = Mathf.Min(truckNotification.alpha + Time.deltaTime, 1f);
+        
+        if (truckNotification.alpha < 1f) {
+            //modify position and rotation of the display
+            truckNotification.transform.position = truckNotificationAnchor.position;
+            truckNotification.transform.LookAt(playerHead);
+            return;
+        }
 
 		// move on the next state, when the player see the truck
 		if(playerSawTruck()) {
@@ -62,6 +70,9 @@ public class TruckComing : ContentSubBlock {
 
 	private void TruckIsComing (){
 		if(truckComingState != TruckComingState.truckIsComing) { return; }
+
+        // turn truck notification off
+        truckNotification.alpha = 0f;
 
 		// when animation of the truck is finished, move on the next state
 		if (!truckAnimation.GetCurrentAnimatorStateInfo(0).IsName(truckComingAnimState)){
