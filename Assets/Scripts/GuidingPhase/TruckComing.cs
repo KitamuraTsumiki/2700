@@ -10,10 +10,10 @@ public class TruckComing : ContentSubBlock {
 	public CanvasGroup truckNotification;
 	public CanvasGroup playerPosNavigation;
 
-	public Transform playerHead;
 	public GameObject truck;
 	public PlayerPosCheckArea playerTargetZone;
 
+	private Transform playerHead;
 	private TruckComingState truckComingState;
 	private Animator truckAnimation;
 	private string truckComingAnimState = "Truck02_coming";
@@ -26,6 +26,7 @@ public class TruckComing : ContentSubBlock {
 	private void Start () {
 		truckComingState = TruckComingState.displayTruckNotification;
 		truckAnimation = truck.GetComponent<Animator>();
+		playerHead = GetComponent<GuidingContentManager>().playerHead.transform;
 	}
 	
 	private void Update () {

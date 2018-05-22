@@ -7,9 +7,13 @@
 public class TruckStops : ContentSubBlock {
 
 	public Transform cranePosGuide;
-	public Transform playerHead;
 	public Transform truckGuide;
 	public GameObject secondTruck;
+	private Transform playerHead;
+
+	private void Start(){
+		playerHead = GetComponent<GuidingContentManager>().playerHead.transform;
+	}
 
 	private void Update () {
 		RecognizeTruck();

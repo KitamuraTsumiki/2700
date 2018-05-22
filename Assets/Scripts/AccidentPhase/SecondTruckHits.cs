@@ -5,11 +5,12 @@
 /// </summary>
 public class SecondTruckHits : ContentSubBlock {
 
-	public GameObject playerHead;
+	private GameObject playerHead;
 
 	private Rigidbody playerRbd;
 
 	private void Start () {
+		playerHead = GetComponent<GuidingContentManager>().playerHead;
 		// animate camera by physics simulation (without vive)
 		var kinematicControl = playerHead.GetComponent<CharacterController>();
 		if(kinematicControl != null) {

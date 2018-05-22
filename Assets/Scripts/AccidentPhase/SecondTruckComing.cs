@@ -8,7 +8,11 @@ public class SecondTruckComing : ContentSubBlock {
 
 	public SecondTruckActions truckAction;
 	public Transform truckFrontGuide;
-	public Transform playerHead;
+	private Transform playerHead;
+
+	private void Start(){
+		playerHead = GetComponent<GuidingContentManager>().playerHead.transform;
+	}
 
 	private void Update () {
 		CheckPlayerTruckContact();
