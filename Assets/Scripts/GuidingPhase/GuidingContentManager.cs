@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class GuidingContentManager : ContentManager {
 
-	enum State { FirstTruckComing, FirstTruckStops, SecondTruckFound, SecondTruckComing, SecondTruckStops1, SecondTruckHits, SecondTruckStops2, InstructNavigation }
+	enum State { Pause, FirstTruckComing, FirstTruckStops, SecondTruckFound, SecondTruckComing, SecondTruckStops1, SecondTruckHits, SecondTruckStops2, InstructNavigation }
 
 	// Contents of guiding (second) phase
 	public TruckComing truckComing;
@@ -22,16 +22,19 @@ public class GuidingContentManager : ContentManager {
 	public SecondTruckStops2 secondTruckStops2;
 
 	public GameObject playerHead;
+	public GameObject playerRbdDummy;
 
 	public Text typeOfEnding;
 
 	private State state;
+	private State lastState;
 
 
 	protected override void Start () {
 		// get the phase manager
 		base.Start();
-		state = State.FirstTruckComing;
+		state = State.Pause;
+		lastState = State.FirstTruckComing;
 
 		// Turn all UI canvases off
 		truckComing.InitUI();
@@ -52,8 +55,20 @@ public class GuidingContentManager : ContentManager {
 		secondTruckStops2.enabled = false;
 	}
 
+	private void Pause(){
+		// "P" key toggles pausing of the state
+		if(Input.GetKeyDown(KeyCode.P)) {
+			if(state != State.Pause) {
+				lastState = state;
+				state = State.Pause;
+			} else {
+				state = lastState;
+			}
+		}
+	}
+
 	private void InitPlayerRbd(){
-		Rigidbody playerRbd = playerHead.GetComponent<Rigidbody>();
+		Rigidbody playerRbd = playerRbdDummy.GetComponent<Rigidbody>();
 		if(playerRbd != null) {
 			playerRbd.isKinematic = true;
 			playerRbd.useGravity = false;
@@ -74,6 +89,8 @@ public class GuidingContentManager : ContentManager {
 		SecondTruckStops1();
 		SecondTruckHits();
 		SecondTruckStops2();
+
+		Pause();
 
 		Debug.Log(state);
 

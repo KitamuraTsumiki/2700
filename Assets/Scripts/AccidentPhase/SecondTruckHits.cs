@@ -15,7 +15,7 @@ public class SecondTruckHits : ContentSubBlock {
 		var kinematicControl = playerHead.GetComponent<CharacterController>();
 		if(kinematicControl != null) {
 			kinematicControl.enabled = false;
-			playerRbd = playerHead.GetComponent<Rigidbody>();
+			playerRbd = GetComponent<GuidingContentManager>().playerRbdDummy.GetComponent<Rigidbody>();
 			playerRbd.isKinematic = false;
 			playerRbd.useGravity = true;
 		}
