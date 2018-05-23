@@ -46,6 +46,10 @@ public class GuidingContentManager : ContentManager {
 		InitTypeOfEndDisplay();
 
 		// deactivate all story block managers
+		DeactivateAllStoryBlocks();
+	}
+
+	private void DeactivateAllStoryBlocks(){
 		truckComing.enabled = false;
 		truckStops.enabled = false;
 		secondTruckFound.enabled = false;
@@ -64,6 +68,20 @@ public class GuidingContentManager : ContentManager {
 			} else {
 				state = lastState;
 			}
+		}
+	}
+
+	private void Skip(){
+		// skip current phase (only available when the player is in the second "guiding" phase
+		var isInGuidingPhase = state == State.FirstTruckComing || state == State.FirstTruckStops;
+		var wasInGuidingPhase = state == State.Pause && (lastState == State.FirstTruckComing || lastState == State.FirstTruckStops);
+
+		if(!isInGuidingPhase || !wasInGuidingPhase) {return;}
+
+		if(Input.GetKeyDown(KeyCode.Space)) {
+			DeactivateAllStoryBlocks();
+			state = State.SecondTruckFound;
+			
 		}
 	}
 
@@ -90,6 +108,7 @@ public class GuidingContentManager : ContentManager {
 		SecondTruckHits();
 		SecondTruckStops2();
 
+		Skip();
 		Pause();
 
 		Debug.Log(state);
