@@ -14,19 +14,14 @@ public class AudioTest : MonoBehaviour {
 	}
 
 	private void Update () {
-		if(audioIsTriggered) {
-			Debug.Log("audio is triggered " + audio.isPlaying);
-			if(!audio.isPlaying) {
-				audio.Play();
-			}
+		if(!audioIsTriggered) { return; }
 
-			if(!audio.isPlaying) {
-				testText.text = "audio has end";
-			}
-
-
-		} else {
-			return;
+		Debug.Log("audio is triggered " + audio.isPlaying);
+		if(!audio.isPlaying) {
+			audio.Play();
+		}
+		if(!audio.isPlaying) {
+			testText.text = "audio has end";
 		}
 	}
 }

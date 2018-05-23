@@ -5,7 +5,11 @@
 /// </summary>
 public class SecondTruckStops2 : ContentSubBlock {
 
-	public SecondTruckActions truckActions;
+	private SecondTruckActions truckActions;
+
+	private void Start(){
+		truckActions = (SecondTruckActions)GameObject.FindObjectOfType(typeof(SecondTruckActions));
+	}
 
 	private void Update () {
 		ActivateTruckActions();

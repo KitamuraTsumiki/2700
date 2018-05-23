@@ -11,6 +11,7 @@ public class SecondTruckActions : MonoBehaviour {
 	public AudioSource truckSoundBeforeHit;
 	public AudioSource truckSoundAfterHit;
 	public GuidingContentManager contentManager;
+
 	private bool soundBeforeHitPlayed = false;
 	private bool soundAfterHitPlayed = false;
 	private Animator truckAnimation;
@@ -33,17 +34,19 @@ public class SecondTruckActions : MonoBehaviour {
 
 	private void ActivateActionsBeforeHit(){
 		// animate the truck
-		if(isGoingToHit) {
-			truckAnimation.Play(truckAnimHit);
-			// activate car horn, brake sound
-			var soundMustBePlayed = truckSoundBeforeHit.clip != null && !truckSoundBeforeHit.isPlaying && !soundBeforeHitPlayed;
-			if(soundMustBePlayed) {
-				truckSoundBeforeHit.Play();
-				soundBeforeHitPlayed = true;
-			}
-		} else {
+		if(!isGoingToHit) {
 			truckAnimation.Play(truckAnimStop);
+			return;
 		}
+
+		truckAnimation.Play(truckAnimHit);
+		// activate car horn, brake sound
+		var soundMustBePlayed = truckSoundBeforeHit.clip != null && !truckSoundBeforeHit.isPlaying && !soundBeforeHitPlayed;
+		if(soundMustBePlayed) {
+			truckSoundBeforeHit.Play();
+			soundBeforeHitPlayed = true;
+		}
+
 	}
 
 	public void ActivateActionsAfterHit(){
@@ -58,11 +61,11 @@ public class SecondTruckActions : MonoBehaviour {
 	private void OnCollisionEnter(Collision collision){
 		Debug.Log("collision with: " + collision.gameObject);
 		// when the collider contacts player's head, "hitting" is activated
-		if(collision.gameObject.tag == "MainCamera") {
-			isContacting = true;
-			Rigidbody rbd = GetComponent<Rigidbody>();
-			rbd.isKinematic = true;
-			rbd.useGravity = false;
-		}
+		if(collision.gameObject.tag != "MainCamera") { return; }
+		isContacting = true;
+		Rigidbody rbd = GetComponent<Rigidbody>();
+		rbd.isKinematic = true;
+		rbd.useGravity = false;
+		
 	}
 }

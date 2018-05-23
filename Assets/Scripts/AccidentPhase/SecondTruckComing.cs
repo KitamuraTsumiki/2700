@@ -6,12 +6,14 @@
 /// </summary>
 public class SecondTruckComing : ContentSubBlock {
 
-	public SecondTruckActions truckAction;
+
 	public Transform truckFrontGuide;
+	private SecondTruckActions truckAction;
 	private Transform playerHead;
 
 	private void Start(){
 		playerHead = GetComponent<GuidingContentManager>().playerHead.transform;
+		truckAction = (SecondTruckActions)GameObject.FindObjectOfType(typeof(SecondTruckActions));
 	}
 
 	private void Update () {

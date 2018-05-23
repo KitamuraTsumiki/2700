@@ -5,10 +5,9 @@
 /// </summary>
 public class SecondTruckFound : ContentSubBlock {
 
-	public float truckCheckPeriod = 3f;
 	public Transform truck;
+	private float truckCheckPeriod = 3f;
 	private Transform playerHead;
-
 	private float truckCheckDeadline;
 
 	private void Start(){
@@ -32,10 +31,14 @@ public class SecondTruckFound : ContentSubBlock {
 			hasFinished = true;
 		}
 
+		CheckTruckRecognitionDeadline(willTruckHit);
+	}
+
+	private void CheckTruckRecognitionDeadline(bool _willTruckHit){
 		if (Time.time > truckCheckDeadline){ // if the player doesn't notice the second truck
 			// move on "SecondTruckComing"
 			Debug.Log("SecondTruckFound has finished (main route)");
-			ActivateTruckAction(willTruckHit);
+			ActivateTruckAction(_willTruckHit);
 			hasFinished = true;
 		}
 	}
