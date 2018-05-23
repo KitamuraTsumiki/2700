@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// This class manages the choreography of the introduction (first) scene.
+/// <summary>
+/// This class manages the choreography of the introduction (first) scene.
+/// </summary>
+
 public class IntroductionContentManager : ContentManager {
 
-	enum State { DiscriptStart, Discripting, DiscriptEnd }
+	enum State { DiscriptStart, Discribing, DiscriptEnd }
 
 	public AudioSource audioDescription;
 	public LineRenderer stopLine;
@@ -14,7 +17,9 @@ public class IntroductionContentManager : ContentManager {
 	private State discriptState = State.DiscriptStart;
 
 	public void SetDiscriptEnd(){
-		discriptState = State.DiscriptEnd;
+		if(Input.GetKeyDown(KeyCode.Space)) {
+			discriptState = State.DiscriptEnd;
+		}
 	}
 
 	protected override void Start () {
@@ -35,19 +40,22 @@ public class IntroductionContentManager : ContentManager {
 
 	private void DiscriptStart(){
 		if(discriptState != State.DiscriptStart) { return; }
-		audioDescription.Play();
-		audioStartTime = Time.time;
-		discriptState = State.Discripting;
+		if(!audioDescription.isPlaying) {
+			audioDescription.Play();
+			audioStartTime = Time.time;
+			discriptState = State.Discribing;
+		}
+
 	}
 
 
 	private void Discripting(){
-		if(discriptState != State.Discripting) { return; }
+		if(discriptState != State.Discribing) { return; }
 		float silentTime = 2f;
 		float introductionEndTime 
 			= audioStartTime + audioDescription.clip.length + silentTime;
 		discriptState = Time.time > introductionEndTime
-			? State.Discripting : State.DiscriptEnd;
+			? State.DiscriptEnd : State.Discribing;
 	}
 
 	private void DiscriptEnd(){
@@ -56,8 +64,11 @@ public class IntroductionContentManager : ContentManager {
 	}
 
 	private void Update () {
+		Debug.Log("discription state: " + discriptState);
 		DiscriptStart();
+		Discripting();
 		WhenDrawGuideline();
+		SetDiscriptEnd();
 		DiscriptEnd();
 	}
 }
