@@ -6,11 +6,14 @@
 public class SecondTruckHits : ContentSubBlock {
 
 	private GameObject playerHead;
-
 	private Rigidbody playerRbd;
+	private CameraPosModification camPosMod;
 
 	private void Start () {
+		camPosMod = (CameraPosModification)FindObjectOfType(typeof(CameraPosModification));
+
 		playerHead = GetComponent<GuidingContentManager>().playerHead;
+
 		// animate camera by physics simulation (without vive)
 		var kinematicControl = playerHead.GetComponent<CharacterController>();
 		if(kinematicControl != null) {
@@ -22,7 +25,13 @@ public class SecondTruckHits : ContentSubBlock {
 	}
 	
 	private void Update () {
-		CheckPlayerVel();
+		//CheckPlayerVel(); // for test without vive
+
+		// for test with vive
+		camPosMod.UpdateCamTransform();
+		if(camPosMod.IsMotionEnd()) {
+			FadeSceneOut();
+		}
 	}
 
 	private void CheckPlayerVel(){

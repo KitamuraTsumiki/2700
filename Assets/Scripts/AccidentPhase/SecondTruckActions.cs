@@ -66,6 +66,31 @@ public class SecondTruckActions : MonoBehaviour {
 		Rigidbody rbd = GetComponent<Rigidbody>();
 		rbd.isKinematic = true;
 		rbd.useGravity = false;
-		
+
+
+		// get contact point with the player
+		Vector3 contactPointWithPlayer = GetContactPointWithPlayer(collision);
+		Vector3 contactDirWithPlayer = GetContactDirWithPlayer(collision);
+
+		// activate CameraPosModification on the Camerarig
+		ActivateCamPosModification(contactPointWithPlayer, contactDirWithPlayer);
+	}
+
+	private void ActivateCamPosModification(Vector3 _contactPoint, Vector3 _motionDir){
+		// activate CameraPosModification on the Camerarig
+		var camPosMod = (CameraPosModification)FindObjectOfType(typeof(CameraPosModification));
+		if(camPosMod == null || camPosMod.isActivated) {return;}
+		if(!camPosMod.isActivated) {
+			camPosMod.SetPointsAndNormal(_contactPoint);
+			camPosMod.isActivated = true;
+		}
+	}
+
+	private Vector3 GetContactPointWithPlayer(Collision _collision){
+		return  _collision.contacts[0].point;
+	}
+
+	private Vector3 GetContactDirWithPlayer(Collision _collision){
+		return _collision.contacts[0].normal;
 	}
 }
