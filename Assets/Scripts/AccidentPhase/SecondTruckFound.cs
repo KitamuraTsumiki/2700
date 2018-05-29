@@ -15,6 +15,14 @@ public class SecondTruckFound : ContentSubBlock {
 		playerHead = GetComponent<GuidingContentManager>().playerHead.transform;
 	}
 
+	private void StartTruckActions(){
+		SecondTruckActions truckActions = truck.GetComponent<SecondTruckActions>();
+
+		// activate truck animation if the "SecondTruckActions" is not active
+		if(truckActions.isActive) {return;}
+		truckActions.isActive = true;
+	}
+
 	private void Update () {
 		CheckTruckRecognition();
 	}
