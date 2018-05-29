@@ -5,14 +5,16 @@
 /// </summary>
 public class SecondTruckFound : ContentSubBlock {
 
-	public Transform truck;
+	private Transform truck;
 	private float truckCheckPeriod = 3f;
 	private Transform playerHead;
 	private float truckCheckDeadline;
 
 	private void Start(){
+		GuidingContentManager contentManager = GetComponent<GuidingContentManager>();
+		truck = contentManager.secondTruck.transform;
 		truckCheckDeadline = Time.time + truckCheckPeriod;
-		playerHead = GetComponent<GuidingContentManager>().playerHead.transform;
+		playerHead = contentManager.playerHead.transform;
 	}
 
 	private void StartTruckActions(){

@@ -25,11 +25,7 @@ public class SecondTruckActions : MonoBehaviour {
 	
 	private void Update () {
 		if(!isActive) { return; }
-
-		var activateTruckActions = contentManager.secondTruckComing.enabled;
-		if(activateTruckActions) {
-			ActivateActionsBeforeHit();
-		}
+		ActivateActionsBeforeHit();
 	}
 
 	private void ActivateActionsBeforeHit(){
@@ -52,31 +48,33 @@ public class SecondTruckActions : MonoBehaviour {
 	public void ActivateActionsAfterHit(){
 		// activate sound
 		var soundMustBePlayed = truckSoundAfterHit.clip != null && !truckSoundAfterHit.isPlaying && !soundAfterHitPlayed;
-		if(soundMustBePlayed) {
-			truckSoundAfterHit.Play();
-			soundAfterHitPlayed = true;
-		}
+		if(!soundMustBePlayed) { return; }
+		float fadingPeriod = 0.2f;
+		truckAnimation.CrossFade(truckAnimStop, fadingPeriod);
+		Debug.Log("truck 02 animation has to played");
+		truckSoundAfterHit.Play();
+		soundAfterHitPlayed = true;
+		
 	}
 
-	private void OnCollisionEnter(Collision collision){
-		Debug.Log("collision with: " + collision.gameObject);
-		// when the collider contacts player's head, "hitting" is activated
-		if(collision.gameObject.tag != "MainCamera") { return; }
+	private void OnTriggerEnter(Collider other){
+		if(other.gameObject.tag != "MainCamera") { return; }
 		isContacting = true;
-		Rigidbody rbd = GetComponent<Rigidbody>();
-		rbd.isKinematic = true;
-		rbd.useGravity = false;
-
 
 		// get contact point with the player
-		Vector3 contactPointWithPlayer = GetContactPointWithPlayer(collision);
-		Vector3 contactDirWithPlayer = GetContactDirWithPlayer(collision);
+		Vector3 ColliderCenterInWorld = transform.TransformPoint(GetComponent<BoxCollider>().center);
+		Vector3 DirTruckToPlayer = other.transform.position - ColliderCenterInWorld;
+		RaycastHit hit;
 
+		if(!Physics.Raycast(ColliderCenterInWorld, DirTruckToPlayer, out hit)) { return; }
+		if(hit.transform.gameObject.tag != "MainCamera") { return; }
+		Vector3 contactPointWithPlayer = hit.point;
+		
 		// activate CameraPosModification on the Camerarig
-		ActivateCamPosModification(contactPointWithPlayer, contactDirWithPlayer);
+		ActivateCamPosModification(contactPointWithPlayer);
 	}
 
-	private void ActivateCamPosModification(Vector3 _contactPoint, Vector3 _motionDir){
+	private void ActivateCamPosModification(Vector3 _contactPoint){
 		// activate CameraPosModification on the Camerarig
 		var camPosMod = (CameraPosModification)FindObjectOfType(typeof(CameraPosModification));
 		if(camPosMod == null || camPosMod.isActivated) {return;}
@@ -84,13 +82,5 @@ public class SecondTruckActions : MonoBehaviour {
 			camPosMod.SetPointsAndNormal(_contactPoint);
 			camPosMod.isActivated = true;
 		}
-	}
-
-	private Vector3 GetContactPointWithPlayer(Collision _collision){
-		return  _collision.contacts[0].point;
-	}
-
-	private Vector3 GetContactDirWithPlayer(Collision _collision){
-		return _collision.contacts[0].normal;
 	}
 }

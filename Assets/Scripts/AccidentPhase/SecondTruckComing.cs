@@ -8,15 +8,19 @@ public class SecondTruckComing : ContentSubBlock {
 
 
 	public Transform truckFrontGuide;
+	private GameObject truck;
 	private SecondTruckActions truckAction;
 	private Transform playerHead;
 
 	private void Start(){
-		playerHead = GetComponent<GuidingContentManager>().playerHead.transform;
+		GuidingContentManager contentManager = GetComponent<GuidingContentManager>();
+		playerHead = contentManager.playerHead.transform;
+		truck = contentManager.secondTruck;
 		truckAction = (SecondTruckActions)GameObject.FindObjectOfType(typeof(SecondTruckActions));
 	}
 
 	private void Update () {
+		CheckTruckRecognition();
 		CheckPlayerTruckContact();
 	}
 
@@ -30,8 +34,34 @@ public class SecondTruckComing : ContentSubBlock {
 		} else if (!truckAction.isContacting && truckHasPassed){
 			// move on "SecondTruckStops"
 			Debug.Log("SecondTruckComing has finished (SecondTruckStops)");
+			truckAction.ActivateActionsAfterHit();
 			isInMainRoute = false;
 			hasFinished = true;
 		}
+	}
+
+	private void CheckTruckRecognition(){
+		bool willTruckHit = true;
+
+		if(PlayerSawTruck()) {
+			// move on instruction phase
+			Debug.Log("truck 02 animation has played");
+			willTruckHit = false;
+			truckAction.ActivateActionsAfterHit();
+			isInMainRoute = false;
+			hasFinished = true;
+		}
+	}
+
+	private bool PlayerSawTruck(){
+		
+		float viewDirThreshold = 0.5f;
+		Vector3 truckDir = Vector3.Normalize(truck.transform.position
+			- new Vector3(playerHead.position.x, truck.transform.position.y, playerHead.position.z));
+		Vector3 viewAngle = playerHead.transform.forward.normalized;
+
+		float viewAngleDotTruckDir = Vector3.Dot(viewAngle, truckDir);
+
+		return viewAngleDotTruckDir > viewDirThreshold;
 	}
 }
