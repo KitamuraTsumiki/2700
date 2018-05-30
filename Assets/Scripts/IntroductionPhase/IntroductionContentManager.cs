@@ -7,18 +7,22 @@ using UnityEngine.SceneManagement;
 
 public class IntroductionContentManager : ContentManager {
 
-	enum State { DiscriptStart, Discribing, DiscriptEnd }
+	enum State { DescriptStart, Describing, DescriptEnd }
 
-	public AudioSource audioDescription;
-	public LineRenderer stopLine;
+	[SerializeField]
+	private AudioSource audioDescription;
+	[SerializeField]
+	private LineRenderer stopLine;
+	[SerializeField]
+	private IntroductionCraneActions craneActions;
 
 	private float stopLineDisplayTime = 10f;
 	private float audioStartTime;
-	private State discriptState = State.DiscriptStart;
+	private State descriptState = State.DescriptStart;
 
-	public void SetDiscriptEnd(){
+	public void SetDescriptEnd(){
 		if(Input.GetKeyDown(KeyCode.Space)) {
-			discriptState = State.DiscriptEnd;
+			descriptState = State.DescriptEnd;
 		}
 	}
 
@@ -39,36 +43,49 @@ public class IntroductionContentManager : ContentManager {
 	}
 
 	private void DiscriptStart(){
-		if(discriptState != State.DiscriptStart) { return; }
+		if(descriptState != State.DescriptStart) { return; }
+
+		// start audio discription
 		if(!audioDescription.isPlaying) {
 			audioDescription.Play();
 			audioStartTime = Time.time;
-			discriptState = State.Discribing;
+			descriptState = State.Describing;
 		}
 
 	}
 
 
 	private void Discripting(){
-		if(discriptState != State.Discribing) { return; }
+		if(descriptState != State.Describing) { return; }
+
+		ControlEnvironmentObjects();
+
 		float silentTime = 2f;
 		float introductionEndTime 
 			= audioStartTime + audioDescription.clip.length + silentTime;
-		discriptState = Time.time > introductionEndTime
-			? State.DiscriptEnd : State.Discribing;
+		descriptState = Time.time > introductionEndTime
+			? State.DescriptEnd : State.Describing;
 	}
 
 	private void DiscriptEnd(){
-		if(discriptState != State.DiscriptEnd) { return; }
+		if(descriptState != State.DescriptEnd) { return; }
 		SceneManager.LoadScene(nextPhase);
 	}
 
+	private void ControlEnvironmentObjects(){
+
+		//activate animation of a crane
+		if(!craneActions.isActive) {
+			craneActions.isActive = true;
+		}
+	}
+
 	private void Update () {
-		Debug.Log("discription state: " + discriptState);
+		Debug.Log("discription state: " + descriptState);
 		DiscriptStart();
 		Discripting();
 		WhenDrawGuideline();
-		SetDiscriptEnd();
+		SetDescriptEnd();
 		DiscriptEnd();
 	}
 }
