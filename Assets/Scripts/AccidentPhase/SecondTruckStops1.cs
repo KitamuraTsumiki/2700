@@ -5,7 +5,8 @@
 /// </summary>
 public class SecondTruckStops1 : ContentSubBlock {
 
-	public SecondTruckActions truckActions;
+	[SerializeField]
+	private SecondTruckActions truckActions;
 
 	private void Update () {
 		EndStoryBlock();

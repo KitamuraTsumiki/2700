@@ -18,6 +18,9 @@ public class SecondTruckActions : MonoBehaviour {
 	private string truckAnimHit = "Truck_Lane2_Hit";
 	private string truckAnimStop = "Truck_Lane2_Stop";
 
+	[SerializeField]
+	private CameraPosModification camPosMod;
+
 	private void Start () {
 		truckAnimation = GetComponent<Animator>();
 		gameObject.SetActive(false);
@@ -76,7 +79,6 @@ public class SecondTruckActions : MonoBehaviour {
 
 	private void ActivateCamPosModification(Vector3 _contactPoint){
 		// activate CameraPosModification on the Camerarig
-		var camPosMod = (CameraPosModification)FindObjectOfType(typeof(CameraPosModification));
 		if(camPosMod == null || camPosMod.isActivated) {return;}
 		if(!camPosMod.isActivated) {
 			camPosMod.SetPointsAndNormal(_contactPoint);
