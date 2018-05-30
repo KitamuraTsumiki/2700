@@ -8,11 +8,10 @@ public class SecondTruckStops1 : ContentSubBlock {
 	public SecondTruckActions truckActions;
 
 	private void Update () {
-		ActivateTruckActions();
+		EndStoryBlock();
 	}
 
-	private void ActivateTruckActions(){
-		// when the audio clip on the "truckActions" finish,
+	private void EndStoryBlock(){
 		// end this block of the story
 		if (!truckActions.truckSoundAfterHit.isPlaying){
 			hasFinished = true;

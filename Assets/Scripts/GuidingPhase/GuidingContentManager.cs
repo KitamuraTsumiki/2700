@@ -23,6 +23,7 @@ public class GuidingContentManager : ContentManager {
 
 	public GameObject playerHead;
 	public GameObject playerRbdDummy;
+	public GameObject secondTruck;
 
 	public Text typeOfEnding;
 
@@ -40,7 +41,7 @@ public class GuidingContentManager : ContentManager {
 		truckComing.InitUI();
 
 		// Initialize player's rigid body status
-		InitPlayerRbd();
+		//InitPlayerRbd();
 
 		// Initialize "type of ending" UI panel (for prototyping)
 		InitTypeOfEndDisplay();
