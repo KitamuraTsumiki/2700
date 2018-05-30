@@ -36,19 +36,20 @@ public class TruckComing : ContentSubBlock {
 		CheckPlayerPosition();
 	}
 
+	private void ModifyTruckNotificationTransform(){
+		truckNotification.transform.position = truckNotificationAnchor.position;
+		truckNotification.transform.LookAt(playerHead);
+		truckNotification.transform.Rotate(Vector3.up, 180f);
+	}
+
 	private void DisplayTruckNotification(){
 		if(truckComingState != TruckComingState.displayTruckNotification) { return;	}
 
 		// display the notification ("the truck is coming")
 		truckNotification.alpha = Mathf.Min(truckNotification.alpha + Time.deltaTime, 1f);
         
-        if (truckNotification.alpha < 1f) {
-            //modify position and rotation of the display
-            truckNotification.transform.position = truckNotificationAnchor.position;
-            truckNotification.transform.LookAt(playerHead);
-            truckNotification.transform.Rotate(Vector3.up, 180f);
-            return;
-        }
+		//modify position and rotation of the display
+		ModifyTruckNotificationTransform();
 
 		// move on the next state, when the player see the truck
 		if(playerSawTruck()) {

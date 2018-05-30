@@ -9,11 +9,13 @@ public class SecondTruckFound : ContentSubBlock {
 	private float truckCheckPeriod = 3f;
 	private Transform playerHead;
 	private float truckCheckDeadline;
+	private SecondTruckActions truckActions;
 
 	private void Start(){
 		GuidingContentManager contentManager = GetComponent<GuidingContentManager>();
 		truck = contentManager.secondTruck.transform;
-		truckCheckDeadline = Time.time + truckCheckPeriod;
+		truckActions = truck.GetComponent<SecondTruckActions>();
+		truckCheckDeadline = 0.7f;
 		playerHead = contentManager.playerHead.transform;
 	}
 
@@ -26,29 +28,27 @@ public class SecondTruckFound : ContentSubBlock {
 	}
 
 	private void Update () {
+		ActivateTruckAction();
 		CheckTruckRecognition();
 	}
 
 	private void CheckTruckRecognition(){
-		bool willTruckHit = true;
-
 		if(PlayerSawTruck()) {
 			// move on instruction phase
 			Debug.Log("SecondTruckFound has finished (instruction route)");
-			willTruckHit = false;
-			ActivateTruckAction(willTruckHit);
+			truckActions.isGoingToHit = false;
 			isInMainRoute = false;
 			hasFinished = true;
 		}
 
-		CheckTruckRecognitionDeadline(willTruckHit);
+		CheckTruckRecognitionDeadline();
 	}
 
-	private void CheckTruckRecognitionDeadline(bool _willTruckHit){
-		if (Time.time > truckCheckDeadline){ // if the player doesn't notice the second truck
+	private void CheckTruckRecognitionDeadline(){
+		if (truckActions.currPosOnPath > truckCheckDeadline){ // if the player doesn't notice the second truck
 			// move on "SecondTruckComing"
 			Debug.Log("SecondTruckFound has finished (main route)");
-			ActivateTruckAction(_willTruckHit);
+
 			hasFinished = true;
 		}
 	}
@@ -64,10 +64,8 @@ public class SecondTruckFound : ContentSubBlock {
 		return viewAngleDotTruckDir > viewDirThreshold;
 	}
 
-	private void ActivateTruckAction(bool _willHit){
-		SecondTruckActions truckActions = truck.GetComponent<SecondTruckActions>();
-
-		truckActions.isGoingToHit = _willHit;
+	private void ActivateTruckAction(){
+		truckActions.isGoingToHit = true;
 
 		if(!truckActions.isActive) {
 			truckActions.isActive = true;

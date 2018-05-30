@@ -12,6 +12,21 @@ public class SecondTruckActions : MonoBehaviour {
 	public AudioSource truckSoundAfterHit;
 	public GuidingContentManager contentManager;
 
+	// animation parameters
+	[SerializeField]
+	private Spline path;
+	[SerializeField,Range(0f,1f)]
+	private float currDist;
+	[SerializeField, Range(0f, 1f)]
+	private float currRot;
+	private float distance;
+	[SerializeField]
+	private Transform tr;
+	[SerializeField]
+	private Transform startingPoint;
+
+	private float truckSpeed = 0.2f;
+
 	private bool soundBeforeHitPlayed = false;
 	private bool soundAfterHitPlayed = false;
 	private Animator truckAnimation;
@@ -21,43 +36,60 @@ public class SecondTruckActions : MonoBehaviour {
 	[SerializeField]
 	private CameraPosModification camPosMod;
 
+	public float currPosOnPath {
+		get{ return currDist; }
+	}
+
 	private void Start () {
 		truckAnimation = GetComponent<Animator>();
 		gameObject.SetActive(false);
+		transform.position = startingPoint.position;
+		transform.rotation = startingPoint.rotation;
 	}
 	
 	private void Update () {
 		if(!isActive) { return; }
 		ActivateActionsBeforeHit();
+		AnimateTruck();
+	}
+
+	private void AnimateTruck(){
+		float brakePosThresh = 0.8f;
+		if(!isGoingToHit && currDist > brakePosThresh) {
+			float brake = 0.95f;
+			truckSpeed *= brake;
+		}
+
+		float step = Time.deltaTime * truckSpeed;
+
+		currDist = Mathf.Min(currDist + step, 1f);
+		tr.position = path.GetPositionOnSpline(currDist);
+		tr.rotation = path.GetOrientationOnSpline(currDist);
 	}
 
 	private void ActivateActionsBeforeHit(){
-		// animate the truck
-		if(!isGoingToHit) {
-			truckAnimation.Play(truckAnimStop);
-			return;
-		}
+		float carHornThresh = 0.8f;
+		if(currDist < carHornThresh || !isGoingToHit) { return; }
 
-		truckAnimation.Play(truckAnimHit);
 		// activate car horn, brake sound
 		var soundMustBePlayed = truckSoundBeforeHit.clip != null && !truckSoundBeforeHit.isPlaying && !soundBeforeHitPlayed;
 		if(soundMustBePlayed) {
+			Debug.Log("sound before hit has played");
 			truckSoundBeforeHit.Play();
 			soundBeforeHitPlayed = true;
 		}
-
 	}
 
 	public void ActivateActionsAfterHit(){
 		// activate sound
 		var soundMustBePlayed = truckSoundAfterHit.clip != null && !truckSoundAfterHit.isPlaying && !soundAfterHitPlayed;
 		if(!soundMustBePlayed) { return; }
+
 		float fadingPeriod = 0.2f;
-		truckAnimation.CrossFade(truckAnimStop, fadingPeriod);
-		Debug.Log("truck 02 animation has to played");
+		Debug.Log("sound after hit has played");
 		truckSoundAfterHit.Play();
 		soundAfterHitPlayed = true;
-		
+
 	}
 
 	private void OnTriggerEnter(Collider other){

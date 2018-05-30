@@ -36,23 +36,18 @@ public class SecondTruckComing : ContentSubBlock {
 		} else if (!truckAction.isContacting && truckHasPassed){
 			// move on "SecondTruckStops"
 			Debug.Log("SecondTruckComing has finished (SecondTruckStops)");
-			truckAction.ActivateActionsAfterHit();
 			isInMainRoute = false;
 			hasFinished = true;
 		}
 	}
 
 	private void CheckTruckRecognition(){
-		bool willTruckHit = true;
-
-		if(PlayerSawTruck()) {
-			// move on instruction phase
-			Debug.Log("truck 02 animation has played");
-			willTruckHit = false;
-			truckAction.ActivateActionsAfterHit();
-			isInMainRoute = false;
-			hasFinished = true;
-		}
+		if(!PlayerSawTruck()) { return; }
+		// move on instruction phase
+		truckAction.isGoingToHit = false;
+		isInMainRoute = false;
+		hasFinished = true;
+		
 	}
 
 	private bool PlayerSawTruck(){
