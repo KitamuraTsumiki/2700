@@ -9,14 +9,16 @@ public class SecondTruckComing : ContentSubBlock {
 
 	public Transform truckFrontGuide;
 	private GameObject truck;
+
+	[SerializeField]
 	private SecondTruckActions truckAction;
+
 	private Transform playerHead;
 
 	private void Start(){
 		GuidingContentManager contentManager = GetComponent<GuidingContentManager>();
 		playerHead = contentManager.playerHead.transform;
 		truck = contentManager.secondTruck;
-		truckAction = (SecondTruckActions)GameObject.FindObjectOfType(typeof(SecondTruckActions));
 	}
 
 	private void Update () {
