@@ -16,7 +16,7 @@ public class TruckComing : ContentSubBlock {
 
 	private Transform playerHead;
 	private TruckComingState truckComingState;
-	private Animator truckAnimation;
+	private FirstTruckActions truckAction;
 	private string truckComingAnimState = "Truck02_coming";
 
 	public void InitUI(){
@@ -26,7 +26,7 @@ public class TruckComing : ContentSubBlock {
 
 	private void Start () {
 		truckComingState = TruckComingState.displayTruckNotification;
-		truckAnimation = truck.GetComponent<Animator>();
+		truckAction = truck.GetComponent<FirstTruckActions>();
 		playerHead = GetComponent<GuidingContentManager>().playerHead.transform;
 	}
 	
@@ -54,7 +54,7 @@ public class TruckComing : ContentSubBlock {
 		// move on the next state, when the player see the truck
 		if(playerSawTruck()) {
 			// start playing animation of the truck
-			truckAnimation.Play(truckComingAnimState);
+			truckAction.isActive = true;
 			truckComingState = TruckComingState.truckIsComing;
 		}
 	}
@@ -77,7 +77,7 @@ public class TruckComing : ContentSubBlock {
         truckNotification.alpha = 0f;
 
 		// when animation of the truck is finished, move on the next state
-		if (!truckAnimation.GetCurrentAnimatorStateInfo(0).IsName(truckComingAnimState)){
+		if (truckAction.hasFinished){
 			truckComingState = TruckComingState.checkPlayerPosition;
 		}
 
