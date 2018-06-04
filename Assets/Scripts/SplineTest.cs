@@ -20,7 +20,7 @@ public class SplineTest : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		distance = spline.Length;
-
+        
 	}
 	
 	// Update is called once per frame
