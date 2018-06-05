@@ -9,7 +9,8 @@ public class SecondTruckHits : ContentSubBlock {
 	private CameraPosModification camPosMod;
 
 	private void Start () {
-		camPosMod = (CameraPosModification)FindObjectOfType(typeof(CameraPosModification));
+        base.Start();
+        camPosMod = (CameraPosModification)FindObjectOfType(typeof(CameraPosModification));
 
 		playerHead = GetComponent<GuidingContentManager>().playerHead;
 
@@ -21,16 +22,26 @@ public class SecondTruckHits : ContentSubBlock {
 	}
 	
 	private void Update () {
-		//CheckPlayerVel(); // for test without vive
-
-		// for test with vive
-		camPosMod.UpdateCamTransform();
+        SwitchDynamicObjectStatus();
+        if (!isActive) { return; }
+         // for test with vive
+        camPosMod.UpdateCamTransform();
 		if(camPosMod.IsMotionEnd()) {
 			FadeSceneOut();
 		}
 	}
 
-	private void FadeSceneOut(){
+    public override void Pause()
+    {
+        base.Pause();
+    }
+
+    protected override void SwitchDynamicObjectStatus()
+    {
+        
+    }
+
+    private void FadeSceneOut(){
 		// make the field of view dark (by an image on UI canvas)
 
 		// if the scene gets dark, end this block of the story

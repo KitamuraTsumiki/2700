@@ -8,14 +8,27 @@ public class SecondTruckStops2 : ContentSubBlock {
 	private SecondTruckActions truckActions;
 
 	private void Start(){
-		truckActions = (SecondTruckActions)GameObject.FindObjectOfType(typeof(SecondTruckActions));
+        base.Start();
+        truckActions = GetComponent<GuidingContentManager>().secondTruck.GetComponent<SecondTruckActions>();
 	}
 
 	private void Update () {
-		ActivateTruckActions();
+        SwitchDynamicObjectStatus();
+        if (!isActive) { return; }
+        ActivateTruckActions();
 	}
 
-	private void ActivateTruckActions(){
+    public override void Pause()
+    {
+        base.Pause();
+    }
+
+    protected override void SwitchDynamicObjectStatus()
+    {
+        truckActions.isActive = isActive;
+    }
+
+    private void ActivateTruckActions(){
 		truckActions.ActivateActionsAfterHit();
 
 		// when the audio clip on the "truckActions" finish,

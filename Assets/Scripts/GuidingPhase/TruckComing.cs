@@ -10,11 +10,11 @@ public class TruckComing : ContentSubBlock {
 	public CanvasGroup truckNotification;
 	public CanvasGroup playerPosNavigation;
 
-	public GameObject truck;
 	public PlayerPosCheckArea playerTargetZone;
     public Transform truckNotificationAnchor;
 
-	private Transform playerHead;
+    private GameObject truck;
+    private Transform playerHead;
 	private TruckComingState truckComingState;
 	private FirstTruckActions truckAction;
 	private string truckComingAnimState = "Truck02_coming";
@@ -24,17 +24,32 @@ public class TruckComing : ContentSubBlock {
 		playerPosNavigation.alpha = 0f;
 	}
 
-	private void Start () {
+	protected override void Start () {
+        base.Start();
 		truckComingState = TruckComingState.displayTruckNotification;
-		truckAction = truck.GetComponent<FirstTruckActions>();
-		playerHead = GetComponent<GuidingContentManager>().playerHead.transform;
+        GuidingContentManager contentManager = GetComponent<GuidingContentManager>();
+        truck = contentManager.firstTruck;
+        truckAction = truck.GetComponent<FirstTruckActions>();
+		playerHead = contentManager.playerHead.transform;
 	}
 	
 	private void Update () {
+        SwitchDynamicObjectStatus();
+        if (!isActive) { return; }
 		DisplayTruckNotification();
 		TruckIsComing();
 		CheckPlayerPosition();
 	}
+
+    public override void Pause()
+    {
+        base.Pause();
+    }
+
+    protected override void SwitchDynamicObjectStatus() {
+        if (truckAction.isActive == isActive) { return; }
+        truckAction.isActive = isActive;
+    }
 
 	private void ModifyTruckNotificationTransform(){
 		truckNotification.transform.position = truckNotificationAnchor.position;

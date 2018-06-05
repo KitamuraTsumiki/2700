@@ -16,17 +16,31 @@ public class SecondTruckComing : ContentSubBlock {
 	private Transform playerHead;
 
 	private void Start(){
-		GuidingContentManager contentManager = GetComponent<GuidingContentManager>();
+        base.Start();
+        GuidingContentManager contentManager = GetComponent<GuidingContentManager>();
 		playerHead = contentManager.playerHead.transform;
 		truck = contentManager.secondTruck;
 	}
 
 	private void Update () {
-		CheckTruckRecognition();
+        SwitchDynamicObjectStatus();
+        if (!isActive) { return; }
+        CheckTruckRecognition();
 		CheckPlayerTruckContact();
 	}
 
-	private void CheckPlayerTruckContact(){
+    public override void Pause()
+    {
+        base.Pause();
+    }
+
+    protected override void SwitchDynamicObjectStatus()
+    {
+        if (truckAction.isActive == isActive) { return; }
+        truckAction.isActive = isActive;
+    }
+
+    private void CheckPlayerTruckContact(){
 		var truckHasPassed = truckFrontGuide.position.z - playerHead.position.z > 0f;
 
 		if(truckAction.isContacting) {

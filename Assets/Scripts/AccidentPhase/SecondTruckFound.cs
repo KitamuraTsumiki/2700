@@ -12,7 +12,8 @@ public class SecondTruckFound : ContentSubBlock {
 	private SecondTruckActions truckActions;
 
 	private void Start(){
-		GuidingContentManager contentManager = GetComponent<GuidingContentManager>();
+        base.Start();
+        GuidingContentManager contentManager = GetComponent<GuidingContentManager>();
 		truck = contentManager.secondTruck.transform;
 		truckActions = truck.GetComponent<SecondTruckActions>();
 		truckCheckDeadline = 0.7f;
@@ -28,11 +29,24 @@ public class SecondTruckFound : ContentSubBlock {
 	}
 
 	private void Update () {
-		ActivateTruckAction();
+        SwitchDynamicObjectStatus();
+        if (!isActive) { return; }
+        ActivateTruckAction();
 		CheckTruckRecognition();
 	}
 
-	private void CheckTruckRecognition(){
+    public override void Pause()
+    {
+        base.Pause();
+    }
+
+    protected override void SwitchDynamicObjectStatus()
+    {
+        if (truckActions.isActive == isActive) { return; }
+        truckActions.isActive = isActive;
+    }
+
+    private void CheckTruckRecognition(){
 		if(PlayerSawTruck()) {
 			// move on instruction phase
 			Debug.Log("SecondTruckFound has finished (instruction route)");
