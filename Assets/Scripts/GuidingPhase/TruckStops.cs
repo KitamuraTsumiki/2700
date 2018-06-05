@@ -6,20 +6,40 @@
 /// </summary>
 public class TruckStops : ContentSubBlock {
 
-	public Transform cranePosGuide;
-	public Transform truckGuide;
-	public GameObject secondTruck;
+    [SerializeField]
+	private Transform cranePosGuide;
+    [SerializeField]
+	private Transform truckGuide;
+    private FirstTruckActions firstTruck;
+	private GameObject secondTruck;
 	private Transform playerHead;
 
 	private void Start(){
-		playerHead = GetComponent<GuidingContentManager>().playerHead.transform;
-	}
+        base.Start();
+        GuidingContentManager contentManager = GetComponent<GuidingContentManager>();
+        playerHead = contentManager.playerHead.transform;
+        firstTruck = contentManager.firstTruck.GetComponent<FirstTruckActions>();
+        secondTruck = contentManager.secondTruck;
+    }
 
 	private void Update () {
+        SwitchDynamicObjectStatus();
+        if (!isActive) { return; }
 		RecognizeTruck();
 	}
 
-	private void RecognizeTruck(){
+    public override void Pause()
+    {
+        base.Pause();
+    }
+
+    protected override void SwitchDynamicObjectStatus()
+    {
+        if (firstTruck.isActive == isActive) { return; }
+        firstTruck.isActive = isActive;
+    }
+
+    private void RecognizeTruck(){
 		// check whether the player recognize that the truck stops
 		// at the correct position in the lane 1
 		// by alignment of position of the truck, the crane and the player

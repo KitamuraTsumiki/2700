@@ -8,11 +8,28 @@ public class SecondTruckStops1 : ContentSubBlock {
 	[SerializeField]
 	private SecondTruckActions truckActions;
 
-	private void Update () {
-		EndStoryBlock();
+    protected override void Start()
+    {
+        base.Start();
+    }
+
+    private void Update () {
+        SwitchDynamicObjectStatus();
+        if (!isActive) { return; }
+        EndStoryBlock();
 	}
 
-	private void EndStoryBlock(){
+    public override void Pause()
+    {
+        base.Pause();
+    }
+
+    protected override void SwitchDynamicObjectStatus()
+    {
+        
+    }
+
+    private void EndStoryBlock(){
 		// end this block of the story
 		if (!truckActions.truckSoundAfterHit.isPlaying){
 			hasFinished = true;

@@ -34,7 +34,12 @@ public class IntroductionContentManager : ContentManager {
 		sceneTransitionEnabled = true;
 	}
 
-	private void WhenDrawGuideline(){
+    public override void Pause()
+    {
+
+    }
+
+    private void WhenDrawGuideline(){
 		var whenDisplayGuideline = stopLine != null 
 			&& audioDescription.time > stopLineDisplayTime;
 		if(whenDisplayGuideline) {

@@ -7,15 +7,16 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class ContentManager : MonoBehaviour {
 
-	public PhaseManager phaseManager;
 	public string nextPhase;
 	public bool sceneTransitionEnabled = false; // for test
 
 	protected virtual void Start () {
-		if(phaseManager == null) {
-			phaseManager = FindObjectOfType<PhaseManager>();
-		}
+		
 	}
+
+    public virtual void Pause() {
+
+    }
 
 	protected virtual void SceneSwitch(){
 		var switchScene = Input.GetKeyDown(KeyCode.A) && sceneTransitionEnabled;

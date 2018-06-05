@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 /// <summary>
 /// This class manages the choreography of the Guiding (second) scene.
@@ -10,24 +11,34 @@ public class GuidingContentManager : ContentManager {
 
 	enum State { Pause, FirstTruckComing, FirstTruckStops, SecondTruckFound, SecondTruckComing, SecondTruckStops1, SecondTruckHits, SecondTruckStops2, InstructNavigation }
 
-	// Contents of guiding (second) phase
-	public TruckComing truckComing;
-	public TruckStops truckStops;
+    // Contents of guiding (second) phase
+    [SerializeField]
+    private TruckComing truckComing;
+    [SerializeField]
+    private TruckStops truckStops;
 
 	// Contents of accident (third) phase
-	public SecondTruckFound secondTruckFound;
-	public SecondTruckComing secondTruckComing;
-	public SecondTruckStops1 secondTruckStops1;
-	public SecondTruckHits secondTruckHits;
-	public SecondTruckStops2 secondTruckStops2;
+    [SerializeField]
+	private SecondTruckFound secondTruckFound;
+    [SerializeField]
+    private SecondTruckComing secondTruckComing;
+    [SerializeField]
+    private SecondTruckStops1 secondTruckStops1;
+    [SerializeField]
+    private SecondTruckHits secondTruckHits;
+    [SerializeField]
+    private SecondTruckStops2 secondTruckStops2;
 
-	public GameObject playerHead;
-	public GameObject secondTruck;
+    public GameObject playerHead;
+    public GameObject firstTruck;
+    public GameObject secondTruck;
 
-	public Text typeOfEnding;
+    [SerializeField]
+    private Text typeOfEnding;
 
 	private State state;
 	private State lastState;
+    
 
 
 	protected override void Start () {
@@ -38,9 +49,6 @@ public class GuidingContentManager : ContentManager {
 
 		// Turn all UI canvases off
 		truckComing.InitUI();
-
-		// Initialize player's rigid body status
-		//InitPlayerRbd();
 
 		// Initialize "type of ending" UI panel (for prototyping)
 		InitTypeOfEndDisplay();
@@ -59,39 +67,66 @@ public class GuidingContentManager : ContentManager {
 		secondTruckStops2.enabled = false;
 	}
 
-	private void Pause(){
-		// "P" key toggles pausing of the state
-		if(Input.GetKeyDown(KeyCode.P)) {
-			if(state != State.Pause) {
-				lastState = state;
-				state = State.Pause;
-			} else {
-				state = lastState;
-			}
-		}
+	public override void Pause(){
+		if(state != State.Pause) {
+            GetActiveContent().Pause();
+			lastState = state;
+			state = State.Pause;
+
+		} else {
+			state = lastState;
+            GetActiveContent().Pause();
+        }
 	}
 
-	private void Skip(){
-		// skip current phase (only available when the player is in the second "guiding" phase
-		var isInGuidingPhase = state == State.FirstTruckComing || state == State.FirstTruckStops;
-		var wasInGuidingPhase = state == State.Pause && (lastState == State.FirstTruckComing || lastState == State.FirstTruckStops);
+    private ContentSubBlock GetActiveContent() {
+        ContentSubBlock content;
 
-		if(!isInGuidingPhase || !wasInGuidingPhase) {return;}
+        switch (state)
+        {
+            case State.FirstTruckComing:
+                content = truckComing;
+                break;
+            case State.FirstTruckStops:
+                content = truckStops;
+                break;
+            case State.SecondTruckFound:
+                content = secondTruckFound;
+                break;
+            case State.SecondTruckComing:
+                content = secondTruckComing;
+                break;
+            case State.SecondTruckStops1:
+                content = secondTruckStops1;
+                break;
+            case State.SecondTruckHits:
+                content = secondTruckHits;
+                break;
+            case State.SecondTruckStops2:
+                content = secondTruckStops2;
+                break;
+            default:
+                content = null;
+                break;
+        }
 
-		if(Input.GetKeyDown(KeyCode.Space)) {
-			DeactivateAllStoryBlocks();
-			state = State.SecondTruckFound;
-			
-		}
-	}
+        return content;
+    }
 
 	private void InitTypeOfEndDisplay(){
 		typeOfEnding.text = "";
 	}
 
 	private void Update () {
-		// call each step of the story
-		TruckComing();
+        Debug.Log(state);
+        ContentSubBlock content = GetActiveContent();
+        if (content != null) {
+            Debug.Log(GetActiveContent().isActive);
+        }
+        
+
+        // call each step of the story
+        TruckComing();
 		InstructNavigation();
 		TruckStops();
 		SecondTruckFound();
@@ -99,12 +134,7 @@ public class GuidingContentManager : ContentManager {
 		SecondTruckStops1();
 		SecondTruckHits();
 		SecondTruckStops2();
-
-		Skip();
-		Pause();
-
-		Debug.Log(state);
-
+        
 		// for testing scene transition
 		base.SceneSwitch();
 	}
@@ -129,7 +159,9 @@ public class GuidingContentManager : ContentManager {
 		if(state != State.InstructNavigation) { return;}
 		// move on "Instruction of correct position for navigation of trucks"
 		typeOfEnding.text = "正しい誘導位置の講習フェイズへ";
-	}
+
+        MoveOnNextPhase();
+    }
 
 	private void TruckStops(){
 		if(state != State.FirstTruckStops) { return;}
@@ -174,33 +206,61 @@ public class GuidingContentManager : ContentManager {
 		if(state != State.SecondTruckStops1) { return;}
 		secondTruckStops1.enabled = true;
 
-		if(secondTruckStops1.hasFinished) {
-			// move on "instruction" phase
-			secondTruckStops1.enabled = false;
-			typeOfEnding.text = "講習フェイズへ";
-		}
-	}
+        if (!secondTruckStops1.hasFinished) { return; }
+		// move on "instruction" phase
+		secondTruckStops1.enabled = false;
+		typeOfEnding.text = "講習フェイズへ";
+
+        MoveOnNextPhase();
+    }
 
 
 	protected void SecondTruckHits(){
 		if(state != State.SecondTruckHits) { return;}
 		secondTruckHits.enabled = true;
 
-		if(secondTruckHits.hasFinished) {
-			// move on "replay" phase
-			secondTruckHits.enabled = false;
-			typeOfEnding.text = "リプレイフェイズへ";
-		}
-	}
+        if (!secondTruckHits.hasFinished) { return; }
+		// move on "replay" phase
+		secondTruckHits.enabled = false;
+		typeOfEnding.text = "リプレイフェイズへ";
+
+        MoveOnNextPhase();
+    }
 
 	protected void SecondTruckStops2(){
 		if(state != State.SecondTruckStops2) { return;}
 		secondTruckStops2.enabled = true;
 
-		if(secondTruckStops2.hasFinished) {
-			// move on "instruction" phase
-			secondTruckStops2.enabled = false;
-			typeOfEnding.text = "講習フェイズへ";
-		}
-	}
+        if (!secondTruckStops2.hasFinished) { return; }
+		// move on "instruction" phase
+		secondTruckStops2.enabled = false;
+		typeOfEnding.text = "講習フェイズへ";
+
+        MoveOnNextPhase();
+    }
+
+    private void MoveOnNextPhase() {
+        var phaseManager = GetComponentInParent<PhaseManager>();
+        if (phaseManager == null) { return; }
+
+        switch (state)
+        {
+            case State.SecondTruckStops1:
+                phaseManager.ActivateinstructionPhase();
+                break;
+            case State.SecondTruckHits:
+                phaseManager.ActivateReplayPhase();
+                break;
+            case State.SecondTruckStops2:
+                phaseManager.ActivateinstructionPhase();
+                break;
+            case State.InstructNavigation:
+                phaseManager.ActivateNavInstructionPhase();
+                break;
+            default:
+                break;
+        }
+
+        gameObject.SetActive(false);
+    }
 }
