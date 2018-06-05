@@ -6,7 +6,6 @@
 public class SecondTruckHits : ContentSubBlock {
 
 	private GameObject playerHead;
-	private Rigidbody playerRbd;
 	private CameraPosModification camPosMod;
 
 	private void Start () {
@@ -18,9 +17,6 @@ public class SecondTruckHits : ContentSubBlock {
 		var kinematicControl = playerHead.GetComponent<CharacterController>();
 		if(kinematicControl != null) {
 			kinematicControl.enabled = false;
-			playerRbd = GetComponent<GuidingContentManager>().playerRbdDummy.GetComponent<Rigidbody>();
-			playerRbd.isKinematic = false;
-			playerRbd.useGravity = true;
 		}
 	}
 	
@@ -30,14 +26,6 @@ public class SecondTruckHits : ContentSubBlock {
 		// for test with vive
 		camPosMod.UpdateCamTransform();
 		if(camPosMod.IsMotionEnd()) {
-			FadeSceneOut();
-		}
-	}
-
-	private void CheckPlayerVel(){
-		float velMagnitudeTh = 0.15f;
-
-		if(playerRbd.velocity.magnitude < velMagnitudeTh) {
 			FadeSceneOut();
 		}
 	}

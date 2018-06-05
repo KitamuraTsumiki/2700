@@ -22,7 +22,6 @@ public class GuidingContentManager : ContentManager {
 	public SecondTruckStops2 secondTruckStops2;
 
 	public GameObject playerHead;
-	public GameObject playerRbdDummy;
 	public GameObject secondTruck;
 
 	public Text typeOfEnding;
@@ -83,14 +82,6 @@ public class GuidingContentManager : ContentManager {
 			DeactivateAllStoryBlocks();
 			state = State.SecondTruckFound;
 			
-		}
-	}
-
-	private void InitPlayerRbd(){
-		Rigidbody playerRbd = playerRbdDummy.GetComponent<Rigidbody>();
-		if(playerRbd != null) {
-			playerRbd.isKinematic = true;
-			playerRbd.useGravity = false;
 		}
 	}
 
