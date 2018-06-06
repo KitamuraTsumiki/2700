@@ -7,8 +7,10 @@ public class TruckComing : ContentSubBlock {
 
 	enum TruckComingState {displayTruckNotification, truckIsComing, checkPlayerPosition}
 
-	public CanvasGroup truckNotification;
-	public CanvasGroup playerPosNavigation;
+    [SerializeField]
+	private CanvasGroup truckNotification;
+    [SerializeField]
+	private CanvasGroup playerPosNavigation;
 
 	public PlayerPosCheckArea playerTargetZone;
     public Transform truckNotificationAnchor;

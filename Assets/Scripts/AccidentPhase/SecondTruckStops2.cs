@@ -9,7 +9,6 @@ public class SecondTruckStops2 : ContentSubBlock {
 
 	private void Start(){
         base.Start();
-        truckActions = GetComponent<GuidingContentManager>().secondTruck.GetComponent<SecondTruckActions>(); // should be modified
 	}
 
 	private void Update () {

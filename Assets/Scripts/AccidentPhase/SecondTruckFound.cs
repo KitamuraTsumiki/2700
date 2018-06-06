@@ -8,6 +8,11 @@ public class SecondTruckFound : ContentSubBlock {
 	public Transform truck;
     public Transform playerHead;
 
+    [SerializeField]
+    private CanvasGroup truckNotification;
+    [SerializeField]
+    private CanvasGroup playerPosNavigation;
+
     private float truckCheckPeriod = 3f;
 	private float truckCheckDeadline;
 	private SecondTruckActions truckActions;
@@ -17,7 +22,13 @@ public class SecondTruckFound : ContentSubBlock {
        truckCheckDeadline = 0.7f;
     }
 
-	private void StartTruckActions(){
+    public void InitUI()
+    {
+        truckNotification.alpha = 0f;
+        playerPosNavigation.alpha = 0f;
+    }
+
+    private void StartTruckActions(){
 		SecondTruckActions truckActions = truck.GetComponent<SecondTruckActions>();
 
 		// activate truck animation if the "SecondTruckActions" is not active
@@ -27,6 +38,7 @@ public class SecondTruckFound : ContentSubBlock {
 
 	private void Update () {
         if (!CheckDynamicObjectReference()) { return; }
+        StartTruckActions();
 
         SwitchDynamicObjectStatus();
         if (!isActive) { return; }
