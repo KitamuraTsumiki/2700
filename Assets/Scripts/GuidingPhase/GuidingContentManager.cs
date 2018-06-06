@@ -11,8 +11,6 @@ public class GuidingContentManager : ContentManager {
 
 	enum State { Pause, FirstTruckComing, FirstTruckStops, InstructNavigation }
 
-    public bool startFromPaused;
-
     // Contents of guiding (second) phase
     [SerializeField]
     private TruckComing truckComing;
@@ -36,7 +34,7 @@ public class GuidingContentManager : ContentManager {
         SetInitialState();
     }
 
-    private void SetInitialState()
+    protected override void SetInitialState()
     {
         state = startFromPaused ? State.Pause : State.FirstTruckComing;
         lastState = State.FirstTruckComing;
@@ -62,17 +60,20 @@ public class GuidingContentManager : ContentManager {
 		truckStops.enabled = false;
 	}
 
-	public override void Pause(){
-		if(state != State.Pause) {
-            GetActiveContent().Pause();
-			lastState = state;
-			state = State.Pause;
+	public override void EnterPause()
+    {
+        if (state == State.Pause) { return; }
+        GetActiveContent().Pause();
+        lastState = state;
+        state = State.Pause;
+    }
 
-		} else {
-			state = lastState;
-            GetActiveContent().Pause();
-        }
-	}
+    public override void ExitPause()
+    {
+        if (state != State.Pause) { return; }
+        state = lastState;
+        GetActiveContent().Pause();
+    }
 
     private ContentSubBlock GetActiveContent() {
         ContentSubBlock content;

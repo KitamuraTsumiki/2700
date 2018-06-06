@@ -10,8 +10,6 @@ public class AccidentContentManager : ContentManager
 
     enum State { Pause, SecondTruckFound, SecondTruckComing, SecondTruckStops1, SecondTruckHits, SecondTruckStops2 }
 
-    public bool startFromPaused;
-
     // Contents of accident (third) phase
     [SerializeField]
     private SecondTruckFound secondTruckFound;
@@ -39,7 +37,7 @@ public class AccidentContentManager : ContentManager
         SetInitialState();
     }
 
-    private void SetInitialState() {
+    protected override void SetInitialState() {
         state = startFromPaused ? State.Pause : State.SecondTruckFound;
         lastState = State.SecondTruckFound;
     }
@@ -69,19 +67,19 @@ public class AccidentContentManager : ContentManager
         secondTruckStops2.enabled = false;
     }
 
-    public override void Pause()
+    public override void EnterPause()
     {
-        if (state != State.Pause)
-        {
-            GetActiveContent().Pause();
-            lastState = state;
-            state = State.Pause;
-        }
-        else
-        {
-            state = lastState;
-            GetActiveContent().Pause();
-        }
+        if (state == State.Pause) { return; }
+        GetActiveContent().Pause();
+        lastState = state;
+        state = State.Pause;
+    }
+
+    public override void ExitPause()
+    {
+        if (state != State.Pause) { return; }
+        state = lastState;
+        GetActiveContent().Pause();
     }
 
     private ContentSubBlock GetActiveContent()

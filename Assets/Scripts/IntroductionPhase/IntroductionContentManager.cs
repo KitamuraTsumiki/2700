@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class IntroductionContentManager : ContentManager {
 
-	enum State { DescriptStart, Describing, DescriptEnd }
+	enum State { DescriptStart, Describing, DescriptEnd, Pause }
 
 	[SerializeField]
 	private AudioSource audioDescription;
@@ -18,9 +18,10 @@ public class IntroductionContentManager : ContentManager {
 
 	private float stopLineDisplayTime = 10f;
 	private float audioStartTime;
-	private State descriptState = State.DescriptStart;
+	private State descriptState;
+    private State lastState;
 
-	public void SetDescriptEnd(){
+    public void SetDescriptEnd(){
 		if(Input.GetKeyDown(KeyCode.Space)) {
 			descriptState = State.DescriptEnd;
 		}
@@ -28,15 +29,26 @@ public class IntroductionContentManager : ContentManager {
 
 	protected override void Start () {
 		// get the phase manager
-		base.Start();
-
-		// enable scene transition
-		sceneTransitionEnabled = true;
+		SetInitialState();
 	}
 
-    public override void Pause()
+    protected override void SetInitialState()
     {
+        descriptState = startFromPaused ? State.Pause : State.DescriptStart;
+        lastState = State.DescriptStart;
+    }
 
+    public override void EnterPause()
+    {
+        if (descriptState == State.Pause) { return; }
+        lastState = descriptState;
+        descriptState = State.Pause;
+    }
+
+    public override void ExitPause()
+    {
+        if (descriptState != State.Pause) { return; }
+        descriptState = lastState;
     }
 
     private void WhenDrawGuideline(){
@@ -74,8 +86,9 @@ public class IntroductionContentManager : ContentManager {
 
 	private void DiscriptEnd(){
 		if(descriptState != State.DescriptEnd) { return; }
-		SceneManager.LoadScene(nextPhase);
-	}
+        MoveOnNextPhase();
+
+    }
 
 	private void ControlEnvironmentObjects(){
 
@@ -90,7 +103,7 @@ public class IntroductionContentManager : ContentManager {
 		DiscriptStart();
 		Discripting();
 		WhenDrawGuideline();
-		SetDescriptEnd();
+		//SetDescriptEnd();
 		DiscriptEnd();
 	}
 

@@ -11,7 +11,12 @@ public class ReplayContentManager : ContentManager
 		
 	}
 
-    public override void Pause()
+    public override void EnterPause()
+    {
+
+    }
+
+    public override void ExitPause()
     {
 
     }

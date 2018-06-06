@@ -46,7 +46,7 @@ public class PhaseManager : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.I))
         {
-            guidingPhase.Invoke();
+            introductionPhase.Invoke();
         }
     }
 
@@ -88,8 +88,9 @@ public class PhaseManager : MonoBehaviour {
 
         ContentManager activePhase = GetActivePhase();
         if (activePhase == null) { return; }
-        activePhase.Pause();
-        
+        activePhase.EnterPause();
+        activePhase.ExitPause();
+
     }
 
     private ContentManager GetActivePhase()

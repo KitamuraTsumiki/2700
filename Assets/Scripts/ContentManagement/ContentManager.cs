@@ -7,22 +7,24 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class ContentManager : MonoBehaviour {
 
-	public string nextPhase;
-	public bool sceneTransitionEnabled = false; // for test
+	public bool startFromPaused;
 
-	protected virtual void Start () {
+    protected virtual void Start () {
 		
 	}
 
-    public virtual void Pause() {
+    protected virtual void SetInitialState()
+    {
+        
+    }
+
+    public virtual void EnterPause()
+    {
 
     }
 
-	protected virtual void SceneSwitch(){
-		var switchScene = Input.GetKeyDown(KeyCode.A) && sceneTransitionEnabled;
-		if(switchScene) {
-			Debug.Log("A is pressed");
-			SceneManager.LoadScene(nextPhase);
-		}
-	}
+    public virtual void ExitPause()
+    {
+
+    }
 }

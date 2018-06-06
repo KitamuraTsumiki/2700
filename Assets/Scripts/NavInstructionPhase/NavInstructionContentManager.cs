@@ -9,7 +9,12 @@ public class NavInstructionContentManager : ContentManager
 		
 	}
 
-    public override void Pause()
+    public override void EnterPause()
+    {
+
+    }
+
+    public override void ExitPause()
     {
 
     }
