@@ -2,39 +2,20 @@
 /// <summary>
 /// This class manages all actions of the first truck in the "guiding" phase
 /// </summary>
-public class FirstTruckActions : MonoBehaviour {
-
-	// animation parameters
-	[SerializeField]
-	private Spline path;
-	[SerializeField,Range(0f,1f)]
-	private float currDist;
-	[SerializeField, Range(0f, 1f)]
-	private float currRot;
-	private float distance;
-	[SerializeField]
-	private Transform tr;
-	[SerializeField]
-	private Transform startingPoint;
-
-	private float truckSpeed = 0.1f;
-
-	public bool isActive {
-		get;
-		set;
-	}
+public class FirstTruckActions : TruckActions
+{
 
 	public bool hasFinished {
 		get;
 		private set;
 	}
 
-	private void Start () {
-		tr.position = startingPoint.position;
-		tr.rotation = startingPoint.rotation;
-	}
-	
-	private void Update () {
+    private void Start()
+    {
+        SetAtStartPosition();
+    }
+
+    private void Update () {
 		AnimateTruck();
 		StopTruck();
 	}
@@ -52,8 +33,7 @@ public class FirstTruckActions : MonoBehaviour {
 		float step = Time.deltaTime * truckSpeed;
 
 		currDist = Mathf.Min(currDist + step, 1f);
-		tr.position = path.GetPositionOnSpline(currDist);
-		tr.rotation = path.GetOrientationOnSpline(currDist);
+        SetTransform();
 	}
 
 	private void StopTruck(){

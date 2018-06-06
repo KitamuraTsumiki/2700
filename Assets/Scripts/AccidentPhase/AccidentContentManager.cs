@@ -28,13 +28,16 @@ public class AccidentContentManager : ContentManager
     private GameObject secondTruck;
     [SerializeField]
     private Text typeOfEnding;
-
+    
     private State state;
     private State lastState;
 
     private void OnEnable()
     {
         SetInitialState();
+
+        // Turn all UI canvases off
+        secondTruckFound.InitUI();
     }
 
     protected override void SetInitialState() {
@@ -47,17 +50,14 @@ public class AccidentContentManager : ContentManager
         // get the phase manager
         base.Start();
         SetInitialState();
-
-        // Turn all UI canvases off
-        secondTruckFound.InitUI();
-
+        
         // Initialize "type of ending" UI panel (for prototyping)
         InitTypeOfEndDisplay();
 
         // deactivate all story block managers
         DeactivateAllStoryBlocks();
     }
-
+    
     private void DeactivateAllStoryBlocks()
     {
         secondTruckFound.enabled = false;

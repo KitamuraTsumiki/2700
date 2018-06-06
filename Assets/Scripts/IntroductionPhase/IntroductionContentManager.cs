@@ -16,21 +16,23 @@ public class IntroductionContentManager : ContentManager {
 	[SerializeField]
 	private IntroductionCraneActions craneActions;
 
+    [SerializeField]
+    private CanvasGroup[] guideCanvases;
+    [SerializeField]
+    private TruckActions[] truckActions;
+
 	private float stopLineDisplayTime = 10f;
 	private float audioStartTime;
 	private State descriptState;
     private State lastState;
 
-    public void SetDescriptEnd(){
-		if(Input.GetKeyDown(KeyCode.Space)) {
-			descriptState = State.DescriptEnd;
-		}
-	}
-
-	protected override void Start () {
+    protected override void Start () {
 		// get the phase manager
 		SetInitialState();
-	}
+        InitUIs();
+        initTrucks();
+
+    }
 
     protected override void SetInitialState()
     {
@@ -38,17 +40,39 @@ public class IntroductionContentManager : ContentManager {
         lastState = State.DescriptStart;
     }
 
+    private void InitUIs()
+    {
+        if (guideCanvases.Length < 1) { return; }
+        GuideCanvasControl.TurnGroupOff(guideCanvases);
+    }
+
+    private void initTrucks() {
+        foreach (TruckActions truckAction in truckActions)
+        {
+            truckAction.SetAtStartPosition();
+            truckAction.gameObject.SetActive(false);
+        }
+    }
+
     public override void EnterPause()
     {
         if (descriptState == State.Pause) { return; }
         lastState = descriptState;
         descriptState = State.Pause;
+
+        if (!audioDescription.isPlaying)
+        { return; }
+        audioDescription.Pause();
     }
 
     public override void ExitPause()
     {
         if (descriptState != State.Pause) { return; }
         descriptState = lastState;
+
+        if (audioDescription.isPlaying)
+        { return; }
+        audioDescription.UnPause();
     }
 
     private void WhenDrawGuideline(){
@@ -86,6 +110,10 @@ public class IntroductionContentManager : ContentManager {
 
 	private void DiscriptEnd(){
 		if(descriptState != State.DescriptEnd) { return; }
+        if (audioDescription.isPlaying)
+        {
+            audioDescription.Stop();
+        }
         MoveOnNextPhase();
 
     }
@@ -103,7 +131,6 @@ public class IntroductionContentManager : ContentManager {
 		DiscriptStart();
 		Discripting();
 		WhenDrawGuideline();
-		//SetDescriptEnd();
 		DiscriptEnd();
 	}
 

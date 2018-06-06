@@ -9,9 +9,7 @@ public class SecondTruckFound : ContentSubBlock {
     public Transform playerHead;
 
     [SerializeField]
-    private CanvasGroup truckNotification;
-    [SerializeField]
-    private CanvasGroup playerPosNavigation;
+    private CanvasGroup[] canvases;
 
     private float truckCheckPeriod = 3f;
 	private float truckCheckDeadline;
@@ -24,8 +22,7 @@ public class SecondTruckFound : ContentSubBlock {
 
     public void InitUI()
     {
-        truckNotification.alpha = 0f;
-        playerPosNavigation.alpha = 0f;
+        GuideCanvasControl.TurnGroupOff(canvases);
     }
 
     private void StartTruckActions(){
@@ -54,6 +51,7 @@ public class SecondTruckFound : ContentSubBlock {
         if (truckActions != null){ return true; }
 
         truckActions = truck.GetComponent<SecondTruckActions>();
+        truckActions.SetAtStartPosition();
         return true;
     }
 

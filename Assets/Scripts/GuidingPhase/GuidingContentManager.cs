@@ -117,7 +117,7 @@ public class GuidingContentManager : ContentManager {
 		truckComing.enabled = true;
 
         // set references of dynamic objects
-        truckComing.truck = firstTruck;
+        truckComing.firstTruck = firstTruck;
         truckComing.playerHead = playerHead.transform;
 
 		if(!truckComing.hasFinished) { return; }
