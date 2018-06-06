@@ -45,14 +45,13 @@ public class TruckComing : ContentSubBlock {
 
     private bool CheckDynamicObjectReference() {
         var truckAndPlayerAreAssigned = truck != null && playerHead != null;
-        if (truckAndPlayerAreAssigned)
-        {
-            if (truckAction == null) {
-                truckAction = truck.GetComponent<FirstTruckActions>();
-            }
-            return true;
-        }
-        return false;
+        if (!truckAndPlayerAreAssigned){ return false; }
+
+        if (truckAction != null) { return true; }
+
+        truckAction = truck.GetComponent<FirstTruckActions>();
+        return true;
+        
     }
 
     /// <summary>

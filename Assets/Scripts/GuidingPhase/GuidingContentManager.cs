@@ -38,15 +38,7 @@ public class GuidingContentManager : ContentManager {
 
     private void SetInitialState()
     {
-        if (startFromPaused)
-        {
-            state = State.Pause;
-        }
-        else
-        {
-            state = State.FirstTruckComing;
-        }
-
+        state = startFromPaused ? State.Pause : State.FirstTruckComing;
         lastState = State.FirstTruckComing;
     }
 

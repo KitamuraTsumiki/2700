@@ -40,15 +40,7 @@ public class AccidentContentManager : ContentManager
     }
 
     private void SetInitialState() {
-        if (startFromPaused)
-        {
-            state = State.Pause;
-        }
-        else
-        {
-            state = State.SecondTruckFound;
-        }
-
+        state = startFromPaused ? State.Pause : State.SecondTruckFound;
         lastState = State.SecondTruckFound;
     }
 
@@ -156,14 +148,8 @@ public class AccidentContentManager : ContentManager
         // split the route
         if (!secondTruckFound.hasFinished) { return; }
         secondTruckFound.enabled = false;
-        if (secondTruckFound.isInMainRoute)
-        {
-            state = State.SecondTruckComing;
-        }
-        else
-        {
-            state = State.SecondTruckStops1;
-        }
+
+        state = secondTruckFound.isInMainRoute ? State.SecondTruckComing : State.SecondTruckStops1;
     }
 
     protected void SecondTruckComing()
@@ -178,14 +164,8 @@ public class AccidentContentManager : ContentManager
         // split the route
         if (!secondTruckComing.hasFinished) { return; }
         secondTruckComing.enabled = false;
-        if (secondTruckComing.isInMainRoute)
-        {
-            state = State.SecondTruckHits;
-        }
-        else
-        {
-            state = State.SecondTruckStops2;
-        }
+
+        state = secondTruckComing.isInMainRoute ? state = State.SecondTruckHits : State.SecondTruckStops2;
     }
 
     protected void SecondTruckStops1()

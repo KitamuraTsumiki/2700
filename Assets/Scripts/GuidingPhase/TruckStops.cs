@@ -30,11 +30,7 @@ public class TruckStops : ContentSubBlock {
     private bool CheckDynamicObjectReference()
     {
         var truckAndPlayerAreAssigned = firstTruck != null && playerHead != null && secondTruck != null;
-        if (truckAndPlayerAreAssigned)
-        {
-            return true;
-        }
-        return false;
+        return truckAndPlayerAreAssigned;
     }
 
     /// <summary>

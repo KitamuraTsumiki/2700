@@ -30,18 +30,15 @@ public class SecondTruckHits : ContentSubBlock {
     private bool CheckDynamicObjectReference()
     {
         var dynamicObjectsAreAssigned = playerHead != null;
-        if (dynamicObjectsAreAssigned)
-        {
-            // animate camera by physics simulation (without vive)
-            var kinematicControl = playerHead.GetComponent<CharacterController>();
-            if (kinematicControl != null)
-            {
-                kinematicControl.enabled = false;
-            }
+        if (!dynamicObjectsAreAssigned){ return false; }
 
-            return true;
-        }
-        return false;
+        // animate camera by physics simulation (without vive)
+        var kinematicControl = playerHead.GetComponent<CharacterController>();
+        if (kinematicControl == null){ return true; }
+
+        kinematicControl.enabled = false;
+        return true;
+        
     }
 
     /// <summary>

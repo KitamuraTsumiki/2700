@@ -49,15 +49,12 @@ public class SecondTruckFound : ContentSubBlock {
     private bool CheckDynamicObjectReference()
     {
         var truckAndPlayerAreAssigned = truck != null && playerHead != null;
-        if (truckAndPlayerAreAssigned)
-        {
-            if (truckActions == null)
-            {
-                truckActions = truck.GetComponent<SecondTruckActions>();
-            }
-            return true;
-        }
-        return false;
+        if (!truckAndPlayerAreAssigned) { return false; }
+
+        if (truckActions != null){ return true; }
+
+        truckActions = truck.GetComponent<SecondTruckActions>();
+        return true;
     }
 
     /// <summary>
