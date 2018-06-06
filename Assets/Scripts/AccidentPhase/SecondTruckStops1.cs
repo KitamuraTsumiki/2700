@@ -19,6 +19,11 @@ public class SecondTruckStops1 : ContentSubBlock {
         EndStoryBlock();
 	}
 
+    /// <summary>
+    /// pausing function is called by "content manager" class
+    /// in a function with the same name.
+    /// it can be triggered by UI panels
+    /// </summary>
     public override void Pause()
     {
         base.Pause();

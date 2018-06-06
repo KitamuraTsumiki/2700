@@ -7,14 +7,17 @@ public class TruckComing : ContentSubBlock {
 
 	enum TruckComingState {displayTruckNotification, truckIsComing, checkPlayerPosition}
 
-	public CanvasGroup truckNotification;
-	public CanvasGroup playerPosNavigation;
+    [SerializeField]
+	private CanvasGroup truckNotification;
+    [SerializeField]
+	private CanvasGroup playerPosNavigation;
 
 	public PlayerPosCheckArea playerTargetZone;
     public Transform truckNotificationAnchor;
 
-    private GameObject truck;
-    private Transform playerHead;
+    public GameObject truck;
+    public Transform playerHead;
+
 	private TruckComingState truckComingState;
 	private FirstTruckActions truckAction;
 	private string truckComingAnimState = "Truck02_coming";
@@ -27,22 +30,36 @@ public class TruckComing : ContentSubBlock {
 	protected override void Start () {
         base.Start();
 		truckComingState = TruckComingState.displayTruckNotification;
-        GuidingContentManager contentManager = GetComponent<GuidingContentManager>();
-        truck = contentManager.firstTruck;
-        truckAction = truck.GetComponent<FirstTruckActions>();
-		playerHead = contentManager.playerHead.transform;
-	}
+    }
 	
 	private void Update () {
+        if (!CheckDynamicObjectReference()) { return; }
+
         SwitchDynamicObjectStatus();
         if (!isActive) { return; }
+
 		DisplayTruckNotification();
 		TruckIsComing();
 		CheckPlayerPosition();
 	}
 
-    public override void Pause()
-    {
+    private bool CheckDynamicObjectReference() {
+        var truckAndPlayerAreAssigned = truck != null && playerHead != null;
+        if (!truckAndPlayerAreAssigned){ return false; }
+
+        if (truckAction != null) { return true; }
+
+        truckAction = truck.GetComponent<FirstTruckActions>();
+        return true;
+        
+    }
+
+    /// <summary>
+    /// pausing function is called by "content manager" class
+    /// in a function with the same name.
+    /// it can be triggered by UI panels
+    /// </summary>
+    public override void Pause() {
         base.Pause();
     }
 

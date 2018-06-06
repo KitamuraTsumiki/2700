@@ -5,22 +5,30 @@
 /// </summary>
 public class SecondTruckFound : ContentSubBlock {
 
-	private Transform truck;
-	private float truckCheckPeriod = 3f;
-	private Transform playerHead;
+	public Transform truck;
+    public Transform playerHead;
+
+    [SerializeField]
+    private CanvasGroup truckNotification;
+    [SerializeField]
+    private CanvasGroup playerPosNavigation;
+
+    private float truckCheckPeriod = 3f;
 	private float truckCheckDeadline;
 	private SecondTruckActions truckActions;
 
 	private void Start(){
         base.Start();
-        GuidingContentManager contentManager = GetComponent<GuidingContentManager>();
-		truck = contentManager.secondTruck.transform;
-		truckActions = truck.GetComponent<SecondTruckActions>();
-		truckCheckDeadline = 0.7f;
-		playerHead = contentManager.playerHead.transform;
-	}
+       truckCheckDeadline = 0.7f;
+    }
 
-	private void StartTruckActions(){
+    public void InitUI()
+    {
+        truckNotification.alpha = 0f;
+        playerPosNavigation.alpha = 0f;
+    }
+
+    private void StartTruckActions(){
 		SecondTruckActions truckActions = truck.GetComponent<SecondTruckActions>();
 
 		// activate truck animation if the "SecondTruckActions" is not active
@@ -29,12 +37,31 @@ public class SecondTruckFound : ContentSubBlock {
 	}
 
 	private void Update () {
+        if (!CheckDynamicObjectReference()) { return; }
+        StartTruckActions();
+
         SwitchDynamicObjectStatus();
         if (!isActive) { return; }
         ActivateTruckAction();
 		CheckTruckRecognition();
 	}
 
+    private bool CheckDynamicObjectReference()
+    {
+        var truckAndPlayerAreAssigned = truck != null && playerHead != null;
+        if (!truckAndPlayerAreAssigned) { return false; }
+
+        if (truckActions != null){ return true; }
+
+        truckActions = truck.GetComponent<SecondTruckActions>();
+        return true;
+    }
+
+    /// <summary>
+    /// pausing function is called by "content manager" class
+    /// in a function with the same name.
+    /// it can be triggered by UI panels
+    /// </summary>
     public override void Pause()
     {
         base.Pause();

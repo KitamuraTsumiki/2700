@@ -6,28 +6,38 @@
 /// </summary>
 public class TruckStops : ContentSubBlock {
 
+    public FirstTruckActions firstTruck;
+    public GameObject secondTruck;
+    public Transform playerHead;
+
     [SerializeField]
 	private Transform cranePosGuide;
     [SerializeField]
 	private Transform truckGuide;
-    private FirstTruckActions firstTruck;
-	private GameObject secondTruck;
-	private Transform playerHead;
-
+    
 	private void Start(){
         base.Start();
-        GuidingContentManager contentManager = GetComponent<GuidingContentManager>();
-        playerHead = contentManager.playerHead.transform;
-        firstTruck = contentManager.firstTruck.GetComponent<FirstTruckActions>();
-        secondTruck = contentManager.secondTruck;
     }
 
 	private void Update () {
+        if (!CheckDynamicObjectReference()) { return; }
+
         SwitchDynamicObjectStatus();
         if (!isActive) { return; }
 		RecognizeTruck();
 	}
 
+    private bool CheckDynamicObjectReference()
+    {
+        var truckAndPlayerAreAssigned = firstTruck != null && playerHead != null && secondTruck != null;
+        return truckAndPlayerAreAssigned;
+    }
+
+    /// <summary>
+    /// pausing function is called by "content manager" class
+    /// in a function with the same name.
+    /// it can be triggered by UI panels
+    /// </summary>
     public override void Pause()
     {
         base.Pause();

@@ -268,6 +268,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextPhase: Accident
   sceneTransitionEnabled: 0
+  startFromPaused: 1
   truckComing: {fileID: 118747773}
   truckStops: {fileID: 118747774}
   secondTruckFound: {fileID: 118747778}
@@ -295,9 +296,10 @@ MonoBehaviour:
   isActive: 0
   truckNotification: {fileID: 201155888}
   playerPosNavigation: {fileID: 1086545276}
-  truck: {fileID: 1777644615}
   playerTargetZone: {fileID: 1651349026}
   truckNotificationAnchor: {fileID: 1677912026}
+  truck: {fileID: 0}
+  playerHead: {fileID: 0}
 --- !u!114 &118747774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,9 +314,11 @@ MonoBehaviour:
   hasFinished: 0
   isInMainRoute: 1
   isActive: 0
+  firstTruck: {fileID: 0}
+  secondTruck: {fileID: 0}
+  playerHead: {fileID: 0}
   cranePosGuide: {fileID: 2005045958}
   truckGuide: {fileID: 970522066}
-  secondTruck: {fileID: 600509422}
 --- !u!114 &118747775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,6 +333,7 @@ MonoBehaviour:
   hasFinished: 0
   isInMainRoute: 1
   isActive: 0
+  truckActions: {fileID: 0}
 --- !u!114 &118747776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,6 +348,8 @@ MonoBehaviour:
   hasFinished: 0
   isInMainRoute: 1
   isActive: 0
+  playerHead: {fileID: 0}
+  camPosMod: {fileID: 253481773}
 --- !u!114 &118747777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,8 +364,9 @@ MonoBehaviour:
   hasFinished: 0
   isInMainRoute: 1
   isActive: 0
+  truck: {fileID: 0}
+  playerHead: {fileID: 0}
   truckFrontGuide: {fileID: 648884658}
-  truckAction: {fileID: 600509426}
 --- !u!114 &118747778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -373,6 +381,10 @@ MonoBehaviour:
   hasFinished: 0
   isInMainRoute: 1
   isActive: 0
+  truck: {fileID: 0}
+  playerHead: {fileID: 0}
+  truckNotification: {fileID: 0}
+  playerPosNavigation: {fileID: 0}
 --- !u!114 &118747779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1395,6 +1407,11 @@ GameObject:
   m_Component:
   - component: {fileID: 332900649}
   - component: {fileID: 332900650}
+  - component: {fileID: 332900655}
+  - component: {fileID: 332900654}
+  - component: {fileID: 332900653}
+  - component: {fileID: 332900652}
+  - component: {fileID: 332900651}
   m_Layer: 0
   m_Name: AccidentContentManager
   m_TagString: Untagged
@@ -1428,6 +1445,96 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextPhase: 
   sceneTransitionEnabled: 0
+  startFromPaused: 0
+  secondTruckFound: {fileID: 332900655}
+  secondTruckComing: {fileID: 332900654}
+  secondTruckStops1: {fileID: 332900653}
+  secondTruckHits: {fileID: 332900652}
+  secondTruckStops2: {fileID: 332900651}
+  playerHead: {fileID: 253481766}
+  secondTruck: {fileID: 600509422}
+  typeOfEnding: {fileID: 1427147586}
+--- !u!114 &332900651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 332900648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a5b35cb2a5687a42ba5a0c2aac03ca2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hasFinished: 0
+  isInMainRoute: 1
+  isActive: 0
+  truckActions: {fileID: 0}
+--- !u!114 &332900652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 332900648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc56e25bf9e036b4aa351390cd304213, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hasFinished: 0
+  isInMainRoute: 1
+  isActive: 0
+  playerHead: {fileID: 0}
+  camPosMod: {fileID: 253481773}
+--- !u!114 &332900653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 332900648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8863ca30a810b4c4eb5d78a091a01cfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hasFinished: 0
+  isInMainRoute: 1
+  isActive: 0
+  truckActions: {fileID: 600509426}
+--- !u!114 &332900654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 332900648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75d05be6f1e34f64589feabe024b1680, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hasFinished: 0
+  isInMainRoute: 1
+  isActive: 0
+  truck: {fileID: 0}
+  playerHead: {fileID: 0}
+  truckFrontGuide: {fileID: 648884658}
+--- !u!114 &332900655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 332900648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a505750409cc21b498bee1605bf8affa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hasFinished: 0
+  isInMainRoute: 1
+  isActive: 0
+  truck: {fileID: 0}
+  playerHead: {fileID: 0}
+  truckNotification: {fileID: 201155888}
+  playerPosNavigation: {fileID: 1086545276}
 --- !u!1 &455321382
 GameObject:
   m_ObjectHideFlags: 0

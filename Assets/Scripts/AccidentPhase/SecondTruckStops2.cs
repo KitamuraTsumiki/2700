@@ -5,19 +5,31 @@
 /// </summary>
 public class SecondTruckStops2 : ContentSubBlock {
 
-	private SecondTruckActions truckActions;
+	public SecondTruckActions truckActions;
 
 	private void Start(){
         base.Start();
-        truckActions = GetComponent<GuidingContentManager>().secondTruck.GetComponent<SecondTruckActions>();
 	}
 
 	private void Update () {
+        if (!CheckDynamicObjectReference()) { return; }
+
         SwitchDynamicObjectStatus();
         if (!isActive) { return; }
         ActivateTruckActions();
 	}
 
+    private bool CheckDynamicObjectReference()
+    {
+        var truckAndPlayerAreAssigned = truckActions != null;
+        return truckAndPlayerAreAssigned;
+    }
+
+    /// <summary>
+    /// pausing function is called by "content manager" class
+    /// in a function with the same name.
+    /// it can be triggered by UI panels
+    /// </summary>
     public override void Pause()
     {
         base.Pause();
