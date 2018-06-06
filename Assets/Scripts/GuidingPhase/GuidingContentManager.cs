@@ -143,6 +143,10 @@ public class GuidingContentManager : ContentManager {
 		if(state != State.FirstTruckComing) { return;}
 		truckComing.enabled = true;
 
+        // set references of dynamic objects
+        truckComing.truck = firstTruck;
+        truckComing.playerHead = playerHead.transform;
+
 		if(!truckComing.hasFinished) { return; }
 		if(truckComing.isInMainRoute) {
 			// move on the next "TruckStop" (second) block in this phase
@@ -167,7 +171,12 @@ public class GuidingContentManager : ContentManager {
 		if(state != State.FirstTruckStops) { return;}
 		truckStops.enabled = true;
 
-		if(truckStops.hasFinished) {
+        // set references of dynamic objects
+        truckStops.firstTruck = firstTruck.GetComponent<FirstTruckActions>();
+        truckStops.playerHead = playerHead.transform;
+        truckStops.secondTruck = secondTruck;
+
+        if (truckStops.hasFinished) {
 			// move on the next phase "Accident"
 			truckStops.enabled = false;
 			state = State.SecondTruckFound;
@@ -178,8 +187,12 @@ public class GuidingContentManager : ContentManager {
 		if(state != State.SecondTruckFound) { return;}
 		secondTruckFound.enabled = true;
 
-		// split the route
-		if(!secondTruckFound.hasFinished) { return; }
+        // set references of dynamic objects
+        secondTruckFound.playerHead = playerHead.transform;
+        secondTruckFound.truck = secondTruck.transform;
+
+        // split the route
+        if (!secondTruckFound.hasFinished) { return; }
 		secondTruckFound.enabled = false;
 		if(secondTruckFound.isInMainRoute) {
 			state = State.SecondTruckComing;
@@ -192,8 +205,12 @@ public class GuidingContentManager : ContentManager {
 		if(state != State.SecondTruckComing) { return;}
 		secondTruckComing.enabled = true;
 
-		// split the route
-		if (!secondTruckComing.hasFinished){ return; }
+        // set references of dynamic objects
+        secondTruckComing.playerHead = playerHead.transform;
+        secondTruckComing.truck = secondTruck;
+
+        // split the route
+        if (!secondTruckComing.hasFinished){ return; }
 		secondTruckComing.enabled = false;
 		if(secondTruckComing.isInMainRoute) {
 			state = State.SecondTruckHits;
@@ -219,6 +236,9 @@ public class GuidingContentManager : ContentManager {
 		if(state != State.SecondTruckHits) { return;}
 		secondTruckHits.enabled = true;
 
+        // set references of dynamic objects
+        secondTruckHits.playerHead = playerHead;
+
         if (!secondTruckHits.hasFinished) { return; }
 		// move on "replay" phase
 		secondTruckHits.enabled = false;
@@ -230,6 +250,9 @@ public class GuidingContentManager : ContentManager {
 	protected void SecondTruckStops2(){
 		if(state != State.SecondTruckStops2) { return;}
 		secondTruckStops2.enabled = true;
+
+        // set references of dynamic objects
+        secondTruckStops2.truckActions = secondTruck.GetComponent<SecondTruckActions>();
 
         if (!secondTruckStops2.hasFinished) { return; }
 		// move on "instruction" phase

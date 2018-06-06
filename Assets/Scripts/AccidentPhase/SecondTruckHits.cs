@@ -5,23 +5,19 @@
 /// </summary>
 public class SecondTruckHits : ContentSubBlock {
 
-	private GameObject playerHead;
+	public GameObject playerHead;
+    [SerializeField]
 	private CameraPosModification camPosMod;
 
 	private void Start () {
         base.Start();
-        camPosMod = (CameraPosModification)FindObjectOfType(typeof(CameraPosModification));
 
-		playerHead = GetComponent<GuidingContentManager>().playerHead;
-
-		// animate camera by physics simulation (without vive)
-		var kinematicControl = playerHead.GetComponent<CharacterController>();
-		if(kinematicControl != null) {
-			kinematicControl.enabled = false;
-		}
-	}
+        
+    }
 	
 	private void Update () {
+        if (!CheckDynamicObjectReference()) { return; }
+
         SwitchDynamicObjectStatus();
         if (!isActive) { return; }
          // for test with vive
@@ -31,6 +27,28 @@ public class SecondTruckHits : ContentSubBlock {
 		}
 	}
 
+    private bool CheckDynamicObjectReference()
+    {
+        var dynamicObjectsAreAssigned = playerHead != null;
+        if (dynamicObjectsAreAssigned)
+        {
+            // animate camera by physics simulation (without vive)
+            var kinematicControl = playerHead.GetComponent<CharacterController>();
+            if (kinematicControl != null)
+            {
+                kinematicControl.enabled = false;
+            }
+
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// pausing function is called by "content manager" class
+    /// in a function with the same name.
+    /// it can be triggered by UI panels
+    /// </summary>
     public override void Pause()
     {
         base.Pause();

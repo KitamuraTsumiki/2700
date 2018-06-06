@@ -5,20 +5,17 @@
 /// </summary>
 public class SecondTruckFound : ContentSubBlock {
 
-	private Transform truck;
-	private float truckCheckPeriod = 3f;
-	private Transform playerHead;
+	public Transform truck;
+    public Transform playerHead;
+
+    private float truckCheckPeriod = 3f;
 	private float truckCheckDeadline;
 	private SecondTruckActions truckActions;
 
 	private void Start(){
         base.Start();
-        GuidingContentManager contentManager = GetComponent<GuidingContentManager>();
-		truck = contentManager.secondTruck.transform;
-		truckActions = truck.GetComponent<SecondTruckActions>();
-		truckCheckDeadline = 0.7f;
-		playerHead = contentManager.playerHead.transform;
-	}
+       truckCheckDeadline = 0.7f;
+    }
 
 	private void StartTruckActions(){
 		SecondTruckActions truckActions = truck.GetComponent<SecondTruckActions>();
@@ -29,12 +26,33 @@ public class SecondTruckFound : ContentSubBlock {
 	}
 
 	private void Update () {
+        if (!CheckDynamicObjectReference()) { return; }
+
         SwitchDynamicObjectStatus();
         if (!isActive) { return; }
         ActivateTruckAction();
 		CheckTruckRecognition();
 	}
 
+    private bool CheckDynamicObjectReference()
+    {
+        var truckAndPlayerAreAssigned = truck != null && playerHead != null;
+        if (truckAndPlayerAreAssigned)
+        {
+            if (truckActions == null)
+            {
+                truckActions = truck.GetComponent<SecondTruckActions>();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// pausing function is called by "content manager" class
+    /// in a function with the same name.
+    /// it can be triggered by UI panels
+    /// </summary>
     public override void Pause()
     {
         base.Pause();

@@ -295,9 +295,10 @@ MonoBehaviour:
   isActive: 0
   truckNotification: {fileID: 201155888}
   playerPosNavigation: {fileID: 1086545276}
-  truck: {fileID: 1777644615}
   playerTargetZone: {fileID: 1651349026}
   truckNotificationAnchor: {fileID: 1677912026}
+  truck: {fileID: 0}
+  playerHead: {fileID: 0}
 --- !u!114 &118747774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,9 +313,11 @@ MonoBehaviour:
   hasFinished: 0
   isInMainRoute: 1
   isActive: 0
+  firstTruck: {fileID: 0}
+  secondTruck: {fileID: 0}
+  playerHead: {fileID: 0}
   cranePosGuide: {fileID: 2005045958}
   truckGuide: {fileID: 970522066}
-  secondTruck: {fileID: 600509422}
 --- !u!114 &118747775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,6 +332,7 @@ MonoBehaviour:
   hasFinished: 0
   isInMainRoute: 1
   isActive: 0
+  truckActions: {fileID: 0}
 --- !u!114 &118747776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,6 +347,8 @@ MonoBehaviour:
   hasFinished: 0
   isInMainRoute: 1
   isActive: 0
+  playerHead: {fileID: 0}
+  camPosMod: {fileID: 253481773}
 --- !u!114 &118747777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,8 +363,9 @@ MonoBehaviour:
   hasFinished: 0
   isInMainRoute: 1
   isActive: 0
+  truck: {fileID: 0}
+  playerHead: {fileID: 0}
   truckFrontGuide: {fileID: 648884658}
-  truckAction: {fileID: 600509426}
 --- !u!114 &118747778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -373,6 +380,8 @@ MonoBehaviour:
   hasFinished: 0
   isInMainRoute: 1
   isActive: 0
+  truck: {fileID: 0}
+  playerHead: {fileID: 0}
 --- !u!114 &118747779
 MonoBehaviour:
   m_ObjectHideFlags: 0
