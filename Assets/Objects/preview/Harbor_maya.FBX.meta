@@ -1,0 +1,143 @@
+fileFormatVersion: 2
+guid: 19041ec2e85958c49869670fc6269436
+timeCreated: 1528190655
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Port-Ground_layer
+    400000: //RootNode
+    400002: Port-Ground_layer
+    2100000: Port_GROUND_poles
+    2100002: NPP-water
+    2100004: Port_GROUND_track
+    2100006: Port_GROUND
+    2100008: Port_bridge-body
+    2100010: cont_front_dred
+    2100012: cont_back_dred
+    2100014: cont_side_dred
+    2100016: cont_front_grey
+    2100018: cont_back_grey
+    2100020: cont_side_grey
+    2100022: cont_front_green
+    2100024: cont_back_green
+    2100026: cont_side_green
+    2100028: cont_front_mae
+    2100030: cont_back_mae
+    2100032: cont_side_mae
+    2100034: cont_up_mae
+    2100036: cont_front_blue
+    2100038: cont_back_blue
+    2100040: cont_side_blue
+    2100042: cont_front_orange
+    2100044: cont_back_orange
+    2100046: cont_side_orange
+    2100048: cont_front_brown
+    2100050: cont_back_brown
+    2100052: cont_side_brown
+    2100054: cont_front_red
+    2100056: cont_back_red
+    2100058: cont_side_red
+    2100060: Port_GROUND_lines
+    2100062: Port_GROUND_black
+    2100064: Port_Fences_pole
+    2100066: Port_Fences_grid
+    2100068: Port_GROUND_lines_black
+    2100070: 01-Rail_rusty
+    2100072: 01-Rail_chrome
+    2100074: 01-Rail_dark
+    2100076: Train_Tracks
+    2100078: Port_GROUND_concrete
+    2100080: Port_GROUND_danger
+    2100082: Port_GROUND_light
+    2100084: Port_terminal_roof
+    2100086: Port_terminal_windows
+    2100088: Port_terminal_booth
+    2100090: Port_terminal_steel
+    2100092: Port_terminal_dark
+    2100094: Port_terminal_red
+    2100096: Port_terminal_white
+    2300000: Port-Ground_layer
+    3300000: Port-Ground_layer
+    4300000: Port-Ground_layer
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
