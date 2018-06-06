@@ -93,4 +93,16 @@ public class IntroductionContentManager : ContentManager {
 		SetDescriptEnd();
 		DiscriptEnd();
 	}
+
+    /// <summary>
+    /// MoveOnNextPhase is called from PhaseManager class to skip this phase
+    /// </summary>
+    public void MoveOnNextPhase() {
+    var phaseManager = GetComponentInParent<PhaseManager>();
+        if (phaseManager == null) { return; }
+
+        phaseManager.ActivateGuidingPhase();
+
+        gameObject.SetActive(false);
+    }
 }

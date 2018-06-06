@@ -213,7 +213,7 @@ public class AccidentContentManager : ContentManager
 
         MoveOnNextPhase();
     }
-
+    
     private void MoveOnNextPhase()
     {
         var phaseManager = GetComponentInParent<PhaseManager>();

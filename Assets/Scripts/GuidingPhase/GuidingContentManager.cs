@@ -156,7 +156,10 @@ public class GuidingContentManager : ContentManager {
         
 	}
 
-    private void MoveOnNextPhase() {
+    /// <summary>
+    /// MoveOnNextPhase is called from PhaseManager class to skip this phase
+    /// </summary>
+    public void MoveOnNextPhase() {
         var phaseManager = GetComponentInParent<PhaseManager>();
         if (phaseManager == null) { return; }
 
@@ -169,6 +172,7 @@ public class GuidingContentManager : ContentManager {
                 phaseManager.ActivateNavInstructionPhase();
                 break;
             default:
+                phaseManager.ActivateAccidentPhase();
                 break;
         }
 
