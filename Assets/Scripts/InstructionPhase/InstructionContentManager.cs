@@ -11,6 +11,7 @@ public class InstructionContentManager : ContentManager
     [SerializeField]
     GameObject worker;
 
+    // those UnityEvents will be replaced with a dictionary of events and names probably
     [SerializeField]
     private UnityEvent startIntroNarration;
     [SerializeField]
@@ -53,21 +54,11 @@ public class InstructionContentManager : ContentManager
         }
 
         TruckActionControl.GuidingPhaseInitSetup(first, second);
-
-        SetSecondTruckHittingStatus();
-        SetDynamicObjectsAsEventListeners();
     }
 
-    private void SetSecondTruckHittingStatus()
-    {
-        secondTruck.GetComponent<SecondTruckActions>().isGoingToHit = true;
-    }
-
-    private void SetDynamicObjectsAsEventListeners() {
-        UnityAction secondTruckAction = new UnityAction(delegate { SetSecondTruckHittingStatus(); });
-        startSecondTruckAction.AddListener(secondTruckAction);
-    }
-
+    /// <summary>
+    /// pausing functions are called in the PhaseManager class
+    /// </summary>
     public override void EnterPause()
     {
         if (isPaused) { return; }

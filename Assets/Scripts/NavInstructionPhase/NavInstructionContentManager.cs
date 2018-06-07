@@ -41,6 +41,9 @@ public class NavInstructionContentManager : ContentManager
         TruckActionControl.GuidingPhaseInitSetup(first, second);
     }
 
+    /// <summary>
+    /// pausing functions are called in the PhaseManager class
+    /// </summary>
     public override void EnterPause()
     {
         if (isPaused) { return; }

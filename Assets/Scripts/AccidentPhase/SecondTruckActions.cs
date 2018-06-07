@@ -6,7 +6,7 @@
 public class SecondTruckActions : TruckActions
 {
 
-	public bool isGoingToHit = false;
+	public bool isGoingToHit;
 	public bool isContacting = false;
 	public AudioSource truckSoundBeforeHit;
 	public AudioSource truckSoundAfterHit;
@@ -22,7 +22,12 @@ public class SecondTruckActions : TruckActions
 		get{ return currDist; }
 	}
 
-	private void Start () {
+    private void OnEnable()
+    {
+        isGoingToHit = true;
+    }
+
+    private void Start () {
 		SetAtStartPosition();
         RecordOriginalSpeed();
         gameObject.SetActive(false);

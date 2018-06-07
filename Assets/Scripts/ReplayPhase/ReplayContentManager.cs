@@ -46,14 +46,11 @@ public class ReplayContentManager : ContentManager
         }
 
         TruckActionControl.GuidingPhaseInitSetup(first, second);
-        SetSecondTruckHittingStatus();
     }
 
-    private void SetSecondTruckHittingStatus()
-    {
-        secondTruck.GetComponent<SecondTruckActions>().isGoingToHit = true;
-    }
-
+    /// <summary>
+    /// pausing functions are called in the PhaseManager class
+    /// </summary>
     public override void EnterPause()
     {
         if (isPaused) { return; }
