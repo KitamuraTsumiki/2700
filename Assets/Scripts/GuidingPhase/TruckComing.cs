@@ -34,7 +34,8 @@ public class TruckComing : ContentSubBlock {
 	private void Update () {
         if (!CheckDynamicObjectReference()) { return; }
 
-        SwitchDynamicObjectStatus();
+        ActivateDynamicObjectStatus();
+        DeactivateDynamicObjectStatus();
         if (!isActive) { return; }
 
 		DisplayTruckNotification();
@@ -63,9 +64,16 @@ public class TruckComing : ContentSubBlock {
         base.Pause();
     }
 
-    protected override void SwitchDynamicObjectStatus() {
+    protected override void ActivateDynamicObjectStatus() {
         if (truckAction.isActive == isActive) { return; }
-        truckAction.isActive = isActive;
+        TruckActionControl.ActivateTruckAction(truckAction);
+        
+    }
+
+    protected override void DeactivateDynamicObjectStatus()
+    {
+        if (truckAction.isActive == isActive) { return; }
+        TruckActionControl.DeactivateTruckAction(truckAction);
     }
 
     /// <summary>

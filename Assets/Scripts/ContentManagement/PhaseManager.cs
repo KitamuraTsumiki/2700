@@ -37,7 +37,8 @@ public class PhaseManager : MonoBehaviour {
         ActivateInitialPhaseTest();
 
         // for the test of phase control features
-        Pause();
+        EnterPause();
+        ExitPause();
         Skip();
         Reset();
     }
@@ -81,7 +82,7 @@ public class PhaseManager : MonoBehaviour {
     /// <summary>
     /// pause will be called from a UI panel in the final product
     /// </summary>
-    public void Pause()
+    public void EnterPause()
     {
         // keyboard interaction is for testing purpose
         if (!Input.GetKeyDown(KeyCode.P)) { return; }
@@ -89,6 +90,16 @@ public class PhaseManager : MonoBehaviour {
         ContentManager activePhase = GetActivePhase();
         if (activePhase == null) { return; }
         activePhase.EnterPause();
+
+    }
+
+    public void ExitPause()
+    {
+        // keyboard interaction is for testing purpose
+        if (!Input.GetKeyDown(KeyCode.O)) { return; }
+
+        ContentManager activePhase = GetActivePhase();
+        if (activePhase == null) { return; }
         activePhase.ExitPause();
 
     }

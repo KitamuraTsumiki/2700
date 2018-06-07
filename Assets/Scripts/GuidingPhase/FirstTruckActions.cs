@@ -13,6 +13,8 @@ public class FirstTruckActions : TruckActions
     private void Start()
     {
         SetAtStartPosition();
+        RecordOriginalSpeed();
+        gameObject.SetActive(false);
     }
 
     private void Update () {

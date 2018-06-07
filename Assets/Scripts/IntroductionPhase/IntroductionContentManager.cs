@@ -19,7 +19,6 @@ public class IntroductionContentManager : ContentManager {
     [SerializeField]
     private CanvasGroup[] guideCanvases;
     [SerializeField]
-    private TruckActions[] truckActions;
 
 	private float stopLineDisplayTime = 10f;
 	private float audioStartTime;
@@ -29,9 +28,12 @@ public class IntroductionContentManager : ContentManager {
     protected override void Start () {
 		// get the phase manager
 		SetInitialState();
-        InitUIs();
-        initTrucks();
 
+        // Turn all UI canvases off
+        InitUIs();
+        
+        // Initialize status of trucks
+        initTrucks();
     }
 
     protected override void SetInitialState()
@@ -47,11 +49,9 @@ public class IntroductionContentManager : ContentManager {
     }
 
     private void initTrucks() {
-        foreach (TruckActions truckAction in truckActions)
-        {
-            truckAction.SetAtStartPosition();
-            truckAction.gameObject.SetActive(false);
-        }
+        FirstTruckActions first = firstTruck.GetComponent<FirstTruckActions>();
+        SecondTruckActions second = secondTruck.GetComponent<SecondTruckActions>();
+        TruckActionControl.IntroductionPhaseInitSetup(first, second);
     }
 
     public override void EnterPause()

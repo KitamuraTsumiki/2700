@@ -17,12 +17,8 @@ public class GuidingContentManager : ContentManager {
     [SerializeField]
     private TruckStops truckStops;
 
-	[SerializeField]
+    [SerializeField]
     private GameObject playerHead;
-    [SerializeField]
-    private GameObject firstTruck;
-    [SerializeField]
-    private GameObject secondTruck;
     [SerializeField]
     private Text typeOfEnding;
 
@@ -48,12 +44,21 @@ public class GuidingContentManager : ContentManager {
         // Turn all UI canvases off
         truckComing.InitUI();
 
+        // Initialize status of trucks
+        InitTrucks();
+
 		// Initialize "type of ending" UI panel (for prototyping)
 		InitTypeOfEndDisplay();
 
 		// deactivate all story block managers
 		DeactivateAllStoryBlocks();
 	}
+
+    private void InitTrucks() {
+        FirstTruckActions first = firstTruck.GetComponent<FirstTruckActions>();
+        SecondTruckActions second = secondTruck.GetComponent<SecondTruckActions>();
+        TruckActionControl.GuidingPhaseInitSetup(first, second);
+    }
 
 	private void DeactivateAllStoryBlocks(){
 		truckComing.enabled = false;
@@ -147,7 +152,7 @@ public class GuidingContentManager : ContentManager {
         // set references of dynamic objects
         truckStops.firstTruck = firstTruck.GetComponent<FirstTruckActions>();
         truckStops.playerHead = playerHead.transform;
-        truckStops.secondTruck = secondTruck;
+        truckStops.secondTruck = secondTruck.GetComponent<SecondTruckActions>();
 
         if (!truckStops.hasFinished) { return; }
 

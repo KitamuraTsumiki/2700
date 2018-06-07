@@ -23,9 +23,10 @@ public class SecondTruckActions : TruckActions
 	}
 
 	private void Start () {
-		gameObject.SetActive(false);
-        SetAtStartPosition();
-	}
+		SetAtStartPosition();
+        RecordOriginalSpeed();
+        gameObject.SetActive(false);
+    }
 	
 	private void Update () {
 		if(!isActive) { return; }

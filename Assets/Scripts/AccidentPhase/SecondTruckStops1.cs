@@ -14,7 +14,9 @@ public class SecondTruckStops1 : ContentSubBlock {
     }
 
     private void Update () {
-        SwitchDynamicObjectStatus();
+        ActivateDynamicObjectStatus();
+        DeactivateDynamicObjectStatus();
+
         if (!isActive) { return; }
         EndStoryBlock();
 	}
@@ -29,9 +31,16 @@ public class SecondTruckStops1 : ContentSubBlock {
         base.Pause();
     }
 
-    protected override void SwitchDynamicObjectStatus()
+    protected override void ActivateDynamicObjectStatus()
     {
-        
+        if (truckActions.isActive == isActive) { return; }
+        TruckActionControl.ActivateTruckAction(truckActions);
+    }
+
+    protected override void DeactivateDynamicObjectStatus()
+    {
+        if (truckActions.isActive == isActive) { return; }
+        TruckActionControl.DeactivateTruckAction(truckActions);
     }
 
     private void EndStoryBlock(){

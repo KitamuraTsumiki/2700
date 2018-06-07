@@ -18,7 +18,9 @@ public class SecondTruckHits : ContentSubBlock {
 	private void Update () {
         if (!CheckDynamicObjectReference()) { return; }
 
-        SwitchDynamicObjectStatus();
+        ActivateDynamicObjectStatus();
+        DeactivateDynamicObjectStatus();
+
         if (!isActive) { return; }
          // for test with vive
         camPosMod.UpdateCamTransform();
@@ -51,9 +53,16 @@ public class SecondTruckHits : ContentSubBlock {
         base.Pause();
     }
 
-    protected override void SwitchDynamicObjectStatus()
+    protected override void ActivateDynamicObjectStatus()
     {
-        
+        if (camPosMod.isActivated == isActive) { return; }
+        camPosMod.isActivated = true;
+    }
+
+    protected override void DeactivateDynamicObjectStatus()
+    {
+        if (camPosMod.isActivated == isActive) { return; }
+        camPosMod.isActivated = false;
     }
 
     private void FadeSceneOut(){

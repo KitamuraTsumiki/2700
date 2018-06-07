@@ -25,8 +25,6 @@ public class AccidentContentManager : ContentManager
     [SerializeField]
     private GameObject playerHead;
     [SerializeField]
-    private GameObject secondTruck;
-    [SerializeField]
     private Text typeOfEnding;
     
     private State state;
@@ -50,7 +48,10 @@ public class AccidentContentManager : ContentManager
         // get the phase manager
         base.Start();
         SetInitialState();
-        
+
+        // Initialize trucks
+        InitTrucks();
+
         // Initialize "type of ending" UI panel (for prototyping)
         InitTypeOfEndDisplay();
 
@@ -65,6 +66,13 @@ public class AccidentContentManager : ContentManager
         secondTruckStops1.enabled = false;
         secondTruckHits.enabled = false;
         secondTruckStops2.enabled = false;
+    }
+
+    private void InitTrucks()
+    {
+        FirstTruckActions first = firstTruck.GetComponent<FirstTruckActions>();
+        SecondTruckActions second = secondTruck.GetComponent<SecondTruckActions>();
+        TruckActionControl.AccidentPhaseInitSetup(first, second);
     }
 
     public override void EnterPause()

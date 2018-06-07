@@ -10,7 +10,8 @@ public class CameraTransform : MonoBehaviour {
 	private void Update () {
 		CameraTranslate();
 		CameraRotation();
-	}
+
+    }
 
 	private void CameraTranslate(){
 		float x = Input.GetAxis("Horizontal") * Time.deltaTime * translateMul;

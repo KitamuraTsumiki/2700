@@ -19,6 +19,8 @@ public class TruckActions : MonoBehaviour {
     [SerializeField]
     protected float truckSpeed = 0.1f;
 
+    private float originalSpeed;
+
     public bool isActive
     {
         get;
@@ -37,6 +39,19 @@ public class TruckActions : MonoBehaviour {
         currDist = 1f;
 
         SetTransform();
+    }
+
+    protected void RecordOriginalSpeed()
+    {
+        originalSpeed = truckSpeed;
+    }
+
+    /// <summary>
+    /// ResetSpeed is called in the TruckActionControl class.
+    /// </summary>
+    public void ResetSpeed()
+    {
+        truckSpeed = originalSpeed;
     }
 
     protected void SetTransform() {

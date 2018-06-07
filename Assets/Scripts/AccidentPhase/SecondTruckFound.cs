@@ -5,9 +5,9 @@
 /// </summary>
 public class SecondTruckFound : ContentSubBlock {
 
-	public Transform truck;
+    public Transform truck;
     public Transform playerHead;
-
+    
     [SerializeField]
     private CanvasGroup[] canvases;
 
@@ -37,7 +37,9 @@ public class SecondTruckFound : ContentSubBlock {
         if (!CheckDynamicObjectReference()) { return; }
         StartTruckActions();
 
-        SwitchDynamicObjectStatus();
+        ActivateDynamicObjectStatus();
+        DeactivateDynamicObjectStatus();
+
         if (!isActive) { return; }
         ActivateTruckAction();
 		CheckTruckRecognition();
@@ -65,10 +67,16 @@ public class SecondTruckFound : ContentSubBlock {
         base.Pause();
     }
 
-    protected override void SwitchDynamicObjectStatus()
+    protected override void ActivateDynamicObjectStatus()
     {
         if (truckActions.isActive == isActive) { return; }
-        truckActions.isActive = isActive;
+        TruckActionControl.ActivateTruckAction(truckActions);
+    }
+
+    protected override void DeactivateDynamicObjectStatus()
+    {
+        if (truckActions.isActive == isActive) { return; }
+        TruckActionControl.DeactivateTruckAction(truckActions);
     }
 
     private void CheckTruckRecognition(){
