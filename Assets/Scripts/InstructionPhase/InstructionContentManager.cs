@@ -84,8 +84,12 @@ public class InstructionContentManager : ContentManager
     private void Update () {
         Debug.Log("you're in the instruction phase");
 
-        debug();
+        //debug();
 	}
+
+    public void timelineTest() {
+        startFirstTruckAction.Invoke();
+    }
 
     private void debug()
     {

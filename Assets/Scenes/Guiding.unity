@@ -232,7 +232,7 @@ GameObject:
   - component: {fileID: 118747774}
   m_Layer: 0
   m_Name: GuidingContentManager
-  m_TagString: Untagged
+  m_TagString: contentsManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -809,7 +809,7 @@ GameObject:
   - component: {fileID: 250241681}
   m_Layer: 0
   m_Name: ReplayContentManager
-  m_TagString: Untagged
+  m_TagString: contentsManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1630,7 +1630,7 @@ GameObject:
   - component: {fileID: 332900651}
   m_Layer: 0
   m_Name: AccidentContentManager
-  m_TagString: Untagged
+  m_TagString: contentsManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3817,7 +3817,7 @@ GameObject:
   - component: {fileID: 629346317}
   m_Layer: 0
   m_Name: IntroductionContentManager
-  m_TagString: Untagged
+  m_TagString: contentsManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4512,9 +4512,11 @@ GameObject:
   m_Component:
   - component: {fileID: 818426187}
   - component: {fileID: 818426188}
+  - component: {fileID: 818426190}
+  - component: {fileID: 818426189}
   m_Layer: 0
   m_Name: InstructionContentManager
-  m_TagString: Untagged
+  m_TagString: contentsManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4652,6 +4654,43 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!95 &818426189
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 818426186}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!320 &818426190
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 818426186}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 14f8e1892dfb69241846c93789665d29, type: 2}
+  m_InitialState: 1
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: 114821825847646342, guid: 14f8e1892dfb69241846c93789665d29, type: 2}
+    value: {fileID: 818426186}
+  - key: {fileID: 114847010752136204, guid: 14f8e1892dfb69241846c93789665d29, type: 2}
+    value: {fileID: 0}
+  m_ExposedReferences:
+    m_References: []
 --- !u!1 &827080500
 GameObject:
   m_ObjectHideFlags: 0
@@ -5390,7 +5429,7 @@ GameObject:
   - component: {fileID: 1104351468}
   m_Layer: 0
   m_Name: NavInstructionContentManager
-  m_TagString: Untagged
+  m_TagString: contentsManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5784,7 +5823,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1216009818}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.465, y: 0, z: 2.379}
+  m_LocalPosition: {x: 2.84, y: 0, z: 2.48}
   m_LocalScale: {x: 0.20172156, y: 0.20172156, z: 0.20172156}
   m_Children: []
   m_Father: {fileID: 0}
