@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class IntroductionContentManager : ContentManager {
 
-	enum State { DescriptStart, Describing, DescriptEnd }
+	enum State { DescriptStart, Describing, DescriptEnd, Pause }
 
 	[SerializeField]
 	private AudioSource audioDescription;
@@ -16,27 +16,63 @@ public class IntroductionContentManager : ContentManager {
 	[SerializeField]
 	private IntroductionCraneActions craneActions;
 
+    [SerializeField]
+    private CanvasGroup[] guideCanvases;
+    [SerializeField]
+
 	private float stopLineDisplayTime = 10f;
 	private float audioStartTime;
-	private State descriptState = State.DescriptStart;
+	private State descriptState;
+    private State lastState;
 
-	public void SetDescriptEnd(){
-		if(Input.GetKeyDown(KeyCode.Space)) {
-			descriptState = State.DescriptEnd;
-		}
-	}
-
-	protected override void Start () {
+    protected override void Start () {
 		// get the phase manager
-		base.Start();
+		SetInitialState();
 
-		// enable scene transition
-		sceneTransitionEnabled = true;
-	}
+        // Turn all UI canvases off
+        InitUIs();
+        
+        // Initialize status of trucks
+        initTrucks();
+    }
 
-    public override void Pause()
+    protected override void SetInitialState()
     {
+        descriptState = startFromPaused ? State.Pause : State.DescriptStart;
+        lastState = State.DescriptStart;
+    }
 
+    private void InitUIs()
+    {
+        if (guideCanvases.Length < 1) { return; }
+        GuideCanvasControl.TurnGroupOff(guideCanvases);
+    }
+
+    private void initTrucks() {
+        FirstTruckActions first = firstTruck.GetComponent<FirstTruckActions>();
+        SecondTruckActions second = secondTruck.GetComponent<SecondTruckActions>();
+        TruckActionControl.IntroductionPhaseInitSetup(first, second);
+    }
+
+    public override void EnterPause()
+    {
+        if (descriptState == State.Pause) { return; }
+        lastState = descriptState;
+        descriptState = State.Pause;
+
+        if (!audioDescription.isPlaying)
+        { return; }
+        audioDescription.Pause();
+    }
+
+    public override void ExitPause()
+    {
+        if (descriptState != State.Pause) { return; }
+        descriptState = lastState;
+
+        if (audioDescription.isPlaying)
+        { return; }
+        audioDescription.UnPause();
     }
 
     private void WhenDrawGuideline(){
@@ -74,8 +110,13 @@ public class IntroductionContentManager : ContentManager {
 
 	private void DiscriptEnd(){
 		if(descriptState != State.DescriptEnd) { return; }
-		SceneManager.LoadScene(nextPhase);
-	}
+        if (audioDescription.isPlaying)
+        {
+            audioDescription.Stop();
+        }
+        MoveOnNextPhase();
+
+    }
 
 	private void ControlEnvironmentObjects(){
 
@@ -90,7 +131,18 @@ public class IntroductionContentManager : ContentManager {
 		DiscriptStart();
 		Discripting();
 		WhenDrawGuideline();
-		SetDescriptEnd();
 		DiscriptEnd();
 	}
+
+    /// <summary>
+    /// MoveOnNextPhase is called from PhaseManager class to skip this phase
+    /// </summary>
+    public void MoveOnNextPhase() {
+    var phaseManager = GetComponentInParent<PhaseManager>();
+        if (phaseManager == null) { return; }
+
+        phaseManager.ActivateGuidingPhase();
+
+        gameObject.SetActive(false);
+    }
 }

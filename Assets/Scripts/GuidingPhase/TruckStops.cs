@@ -7,7 +7,7 @@
 public class TruckStops : ContentSubBlock {
 
     public FirstTruckActions firstTruck;
-    public GameObject secondTruck;
+    public SecondTruckActions secondTruck;
     public Transform playerHead;
 
     [SerializeField]
@@ -15,14 +15,16 @@ public class TruckStops : ContentSubBlock {
     [SerializeField]
 	private Transform truckGuide;
     
-	private void Start(){
+	protected override void Start(){
         base.Start();
     }
 
 	private void Update () {
         if (!CheckDynamicObjectReference()) { return; }
 
-        SwitchDynamicObjectStatus();
+        ActivateDynamicObjectStatus();
+        DeactivateDynamicObjectStatus();
+
         if (!isActive) { return; }
 		RecognizeTruck();
 	}
@@ -43,10 +45,17 @@ public class TruckStops : ContentSubBlock {
         base.Pause();
     }
 
-    protected override void SwitchDynamicObjectStatus()
+    protected override void ActivateDynamicObjectStatus()
     {
         if (firstTruck.isActive == isActive) { return; }
-        firstTruck.isActive = isActive;
+        TruckActionControl.ActivateTruckAction(firstTruck);
+
+    }
+
+    protected override void DeactivateDynamicObjectStatus()
+    {
+        if (firstTruck.isActive == isActive) { return; }
+        TruckActionControl.DeactivateTruckAction(firstTruck);
     }
 
     private void RecognizeTruck(){
@@ -60,7 +69,7 @@ public class TruckStops : ContentSubBlock {
 		var isAligned = totalPosDiff < positionThreshold;
 		if(isAligned) {
 			Debug.Log("TruckStops has finished");
-			secondTruck.SetActive(true);
+            TruckActionControl.ActivateTruckObject(secondTruck);
 			hasFinished = true;
 		}
 	}

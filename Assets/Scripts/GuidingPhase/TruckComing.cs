@@ -15,16 +15,15 @@ public class TruckComing : ContentSubBlock {
 	public PlayerPosCheckArea playerTargetZone;
     public Transform truckNotificationAnchor;
 
-    public GameObject truck;
+    public GameObject firstTruck;
     public Transform playerHead;
 
 	private TruckComingState truckComingState;
 	private FirstTruckActions truckAction;
-	private string truckComingAnimState = "Truck02_coming";
 
 	public void InitUI(){
-		truckNotification.alpha = 0f;
-		playerPosNavigation.alpha = 0f;
+        CanvasGroup[] canvases = {truckNotification, playerPosNavigation };
+        GuideCanvasControl.TurnGroupOff(canvases);
 	}
 
 	protected override void Start () {
@@ -35,7 +34,8 @@ public class TruckComing : ContentSubBlock {
 	private void Update () {
         if (!CheckDynamicObjectReference()) { return; }
 
-        SwitchDynamicObjectStatus();
+        ActivateDynamicObjectStatus();
+        DeactivateDynamicObjectStatus();
         if (!isActive) { return; }
 
 		DisplayTruckNotification();
@@ -44,12 +44,13 @@ public class TruckComing : ContentSubBlock {
 	}
 
     private bool CheckDynamicObjectReference() {
-        var truckAndPlayerAreAssigned = truck != null && playerHead != null;
+        var truckAndPlayerAreAssigned = firstTruck != null && playerHead != null;
         if (!truckAndPlayerAreAssigned){ return false; }
 
         if (truckAction != null) { return true; }
 
-        truckAction = truck.GetComponent<FirstTruckActions>();
+        truckAction = firstTruck.GetComponent<FirstTruckActions>();
+        truckAction.SetAtStartPosition();
         return true;
         
     }
@@ -63,11 +64,23 @@ public class TruckComing : ContentSubBlock {
         base.Pause();
     }
 
-    protected override void SwitchDynamicObjectStatus() {
+    protected override void ActivateDynamicObjectStatus() {
         if (truckAction.isActive == isActive) { return; }
-        truckAction.isActive = isActive;
+        TruckActionControl.ActivateTruckAction(truckAction);
+        
     }
 
+    protected override void DeactivateDynamicObjectStatus()
+    {
+        if (truckAction.isActive == isActive) { return; }
+        TruckActionControl.DeactivateTruckAction(truckAction);
+    }
+
+    /// <summary>
+    /// depending on the style of UIs,
+    /// this function may be separated from this class
+    /// and included in "GuideCanvasControl" class in the future development.
+    /// </summary>
 	private void ModifyTruckNotificationTransform(){
 		truckNotification.transform.position = truckNotificationAnchor.position;
 		truckNotification.transform.LookAt(playerHead);
@@ -77,8 +90,8 @@ public class TruckComing : ContentSubBlock {
 	private void DisplayTruckNotification(){
 		if(truckComingState != TruckComingState.displayTruckNotification) { return;	}
 
-		// display the notification ("the truck is coming")
-		truckNotification.alpha = Mathf.Min(truckNotification.alpha + Time.deltaTime, 1f);
+        // display the notification ("the truck is coming")
+        GuideCanvasControl.FadeIn(truckNotification);
         
 		//modify position and rotation of the display
 		ModifyTruckNotificationTransform();
@@ -86,15 +99,14 @@ public class TruckComing : ContentSubBlock {
 		// move on the next state, when the player see the truck
 		if(playerSawTruck()) {
 			// start playing animation of the truck
-			truckAction.isActive = true;
 			truckComingState = TruckComingState.truckIsComing;
 		}
 	}
 
 	private bool playerSawTruck(){
 		float viewDirThreshold = 0.1f;
-		Vector3 truckDir = Vector3.Normalize(truck.transform.position
-			- new Vector3(playerHead.position.x, truck.transform.position.y, playerHead.position.z));
+		Vector3 truckDir = Vector3.Normalize(firstTruck.transform.position
+			- new Vector3(playerHead.position.x, firstTruck.transform.position.y, playerHead.position.z));
 		Vector3 viewAngle = playerHead.transform.forward.normalized;
 
 		float viewAngleDotTruckDir = Vector3.Dot(viewAngle, truckDir);
@@ -106,7 +118,7 @@ public class TruckComing : ContentSubBlock {
 		if(truckComingState != TruckComingState.truckIsComing) { return; }
 
         // turn truck notification off
-        truckNotification.alpha = 0f;
+        GuideCanvasControl.TurnOff(truckNotification);
 
 		// when animation of the truck is finished, move on the next state
 		if (truckAction.hasFinished){
@@ -116,9 +128,9 @@ public class TruckComing : ContentSubBlock {
 	}
 
 	private void DisplayPlayerPosNavigation (){
-		// if the player is outside of the target zone,
-		// display truck notification
-		playerPosNavigation.alpha = Mathf.Min(playerPosNavigation.alpha + Time.deltaTime, 1f);
+        // if the player is outside of the target zone,
+        // display truck notification
+        GuideCanvasControl.FadeIn(playerPosNavigation);
 	} 
 
 	private void CheckPlayerPosition(){

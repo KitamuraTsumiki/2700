@@ -9,6 +9,8 @@ using UnityEngine.Events;
 public class PhaseManager : MonoBehaviour {
 
     [SerializeField]
+    private UnityEvent introductionPhase;
+    [SerializeField]
     private UnityEvent guidingPhase;
     [SerializeField]
     private UnityEvent accidentPhase;
@@ -25,36 +27,81 @@ public class PhaseManager : MonoBehaviour {
         for (int i = 0; i < phaseNum; i++) {
             transform.GetChild(i).gameObject.SetActive(false) ;
         }
+
+        // initialize the phase after integration of the introduction phase
+        //ActivateIntroductionPhase();
     }
 
     private void Update()
     {
         ActivateInitialPhaseTest();
-        Pause();
+
+        // for the test of phase control features
+        EnterPause();
+        ExitPause();
+        Skip();
+        Reset();
     }
 
     private void ActivateInitialPhaseTest()
     {
         if (Input.GetKeyDown(KeyCode.I))
         {
-            guidingPhase.Invoke();
+            introductionPhase.Invoke();
         }
     }
 
+    /// <summary>
+    /// skip will be called from a UI panel in the final product
+    /// </summary>
     public void Skip()
     {
+        // this feature is available in only "introduction" and "guiding" phase
+        // keyboard interaction is for testing purpose
+        if (!Input.GetKeyDown(KeyCode.Alpha1)) { return; }
+
+        // get activated phase
+        var activePhase = GetActivePhase();
+        if(activePhase == null) { return; }
+
+        bool isIntroductionPhase = activePhase.GetType() == typeof(IntroductionContentManager);
+        bool isGuidingPhase = activePhase.GetType() == typeof(GuidingContentManager);
+        
+        bool canSkip = isIntroductionPhase || isGuidingPhase;
+        
+        if (!canSkip) { return; }
+
+        // move on next phase
+        if (isIntroductionPhase) {
+            activePhase.gameObject.GetComponent<IntroductionContentManager>().MoveOnNextPhase();
+            return;
+        }
+        activePhase.gameObject.GetComponent<GuidingContentManager>().MoveOnNextPhase();
+    }
+
+    /// <summary>
+    /// pause will be called from a UI panel in the final product
+    /// </summary>
+    public void EnterPause()
+    {
+        // keyboard interaction is for testing purpose
+        if (!Input.GetKeyDown(KeyCode.P)) { return; }
+
+        ContentManager activePhase = GetActivePhase();
+        if (activePhase == null) { return; }
+        activePhase.EnterPause();
 
     }
 
-    public void Pause()
+    public void ExitPause()
     {
         // keyboard interaction is for testing purpose
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            ContentManager activePhase = GetActivePhase();
-            if (activePhase == null) { return; }
-            activePhase.Pause();
-        }
+        if (!Input.GetKeyDown(KeyCode.O)) { return; }
+
+        ContentManager activePhase = GetActivePhase();
+        if (activePhase == null) { return; }
+        activePhase.ExitPause();
+
     }
 
     private ContentManager GetActivePhase()
@@ -71,9 +118,20 @@ public class PhaseManager : MonoBehaviour {
         return null;
     }
 
+    /// <summary>
+    /// reset will be called from a UI panel in the final product
+    /// </summary>
     public void Reset()
     {
-        
+        // keyboard interaction is for testing purpose
+        if (!Input.GetKeyDown(KeyCode.Alpha2)) { return; }
+
+        // stop activated phase
+        GetActivePhase().gameObject.SetActive(false);
+
+        // reload current scene
+        Scene scene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(scene.name);
     }
 
     /// <summary>
@@ -81,7 +139,12 @@ public class PhaseManager : MonoBehaviour {
     /// in each content manager,
     /// and when the player selects particular phase on the UI
     /// </summary>
-    
+
+    public void ActivateIntroductionPhase()
+    {
+        introductionPhase.Invoke();
+    }
+
     public void ActivateGuidingPhase()
     {
         guidingPhase.Invoke();

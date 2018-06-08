@@ -17,9 +17,14 @@ public class ContentSubBlock : MonoBehaviour {
         
     }
 
-    protected virtual void SwitchDynamicObjectStatus()
+    protected virtual void ActivateDynamicObjectStatus()
     {
         
+    }
+
+    protected virtual void DeactivateDynamicObjectStatus()
+    {
+
     }
 
     public virtual void Pause() {

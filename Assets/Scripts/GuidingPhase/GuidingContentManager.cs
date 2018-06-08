@@ -11,20 +11,14 @@ public class GuidingContentManager : ContentManager {
 
 	enum State { Pause, FirstTruckComing, FirstTruckStops, InstructNavigation }
 
-    public bool startFromPaused;
-
     // Contents of guiding (second) phase
     [SerializeField]
     private TruckComing truckComing;
     [SerializeField]
     private TruckStops truckStops;
 
-	[SerializeField]
+    [SerializeField]
     private GameObject playerHead;
-    [SerializeField]
-    private GameObject firstTruck;
-    [SerializeField]
-    private GameObject secondTruck;
     [SerializeField]
     private Text typeOfEnding;
 
@@ -36,7 +30,7 @@ public class GuidingContentManager : ContentManager {
         SetInitialState();
     }
 
-    private void SetInitialState()
+    protected override void SetInitialState()
     {
         state = startFromPaused ? State.Pause : State.FirstTruckComing;
         lastState = State.FirstTruckComing;
@@ -50,6 +44,9 @@ public class GuidingContentManager : ContentManager {
         // Turn all UI canvases off
         truckComing.InitUI();
 
+        // Initialize status of trucks
+        InitTrucks();
+
 		// Initialize "type of ending" UI panel (for prototyping)
 		InitTypeOfEndDisplay();
 
@@ -57,22 +54,31 @@ public class GuidingContentManager : ContentManager {
 		DeactivateAllStoryBlocks();
 	}
 
+    private void InitTrucks() {
+        FirstTruckActions first = firstTruck.GetComponent<FirstTruckActions>();
+        SecondTruckActions second = secondTruck.GetComponent<SecondTruckActions>();
+        TruckActionControl.GuidingPhaseInitSetup(first, second);
+    }
+
 	private void DeactivateAllStoryBlocks(){
 		truckComing.enabled = false;
 		truckStops.enabled = false;
 	}
 
-	public override void Pause(){
-		if(state != State.Pause) {
-            GetActiveContent().Pause();
-			lastState = state;
-			state = State.Pause;
+	public override void EnterPause()
+    {
+        if (state == State.Pause) { return; }
+        GetActiveContent().Pause();
+        lastState = state;
+        state = State.Pause;
+    }
 
-		} else {
-			state = lastState;
-            GetActiveContent().Pause();
-        }
-	}
+    public override void ExitPause()
+    {
+        if (state != State.Pause) { return; }
+        state = lastState;
+        GetActiveContent().Pause();
+    }
 
     private ContentSubBlock GetActiveContent() {
         ContentSubBlock content;
@@ -116,7 +122,7 @@ public class GuidingContentManager : ContentManager {
 		truckComing.enabled = true;
 
         // set references of dynamic objects
-        truckComing.truck = firstTruck;
+        truckComing.firstTruck = firstTruck;
         truckComing.playerHead = playerHead.transform;
 
 		if(!truckComing.hasFinished) { return; }
@@ -146,7 +152,7 @@ public class GuidingContentManager : ContentManager {
         // set references of dynamic objects
         truckStops.firstTruck = firstTruck.GetComponent<FirstTruckActions>();
         truckStops.playerHead = playerHead.transform;
-        truckStops.secondTruck = secondTruck;
+        truckStops.secondTruck = secondTruck.GetComponent<SecondTruckActions>();
 
         if (!truckStops.hasFinished) { return; }
 
@@ -156,7 +162,10 @@ public class GuidingContentManager : ContentManager {
         
 	}
 
-    private void MoveOnNextPhase() {
+    /// <summary>
+    /// MoveOnNextPhase is called from PhaseManager class to skip this phase
+    /// </summary>
+    public void MoveOnNextPhase() {
         var phaseManager = GetComponentInParent<PhaseManager>();
         if (phaseManager == null) { return; }
 
@@ -169,6 +178,7 @@ public class GuidingContentManager : ContentManager {
                 phaseManager.ActivateNavInstructionPhase();
                 break;
             default:
+                phaseManager.ActivateAccidentPhase();
                 break;
         }
 

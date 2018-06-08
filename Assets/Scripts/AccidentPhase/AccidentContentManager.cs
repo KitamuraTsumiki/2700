@@ -10,8 +10,6 @@ public class AccidentContentManager : ContentManager
 
     enum State { Pause, SecondTruckFound, SecondTruckComing, SecondTruckStops1, SecondTruckHits, SecondTruckStops2 }
 
-    public bool startFromPaused;
-
     // Contents of accident (third) phase
     [SerializeField]
     private SecondTruckFound secondTruckFound;
@@ -27,19 +25,20 @@ public class AccidentContentManager : ContentManager
     [SerializeField]
     private GameObject playerHead;
     [SerializeField]
-    private GameObject secondTruck;
-    [SerializeField]
     private Text typeOfEnding;
-
+    
     private State state;
     private State lastState;
 
     private void OnEnable()
     {
         SetInitialState();
+
+        // Turn all UI canvases off
+        secondTruckFound.InitUI();
     }
 
-    private void SetInitialState() {
+    protected override void SetInitialState() {
         state = startFromPaused ? State.Pause : State.SecondTruckFound;
         lastState = State.SecondTruckFound;
     }
@@ -50,8 +49,8 @@ public class AccidentContentManager : ContentManager
         base.Start();
         SetInitialState();
 
-        // Turn all UI canvases off
-        secondTruckFound.InitUI();
+        // Initialize trucks
+        InitTrucks();
 
         // Initialize "type of ending" UI panel (for prototyping)
         InitTypeOfEndDisplay();
@@ -59,7 +58,7 @@ public class AccidentContentManager : ContentManager
         // deactivate all story block managers
         DeactivateAllStoryBlocks();
     }
-
+    
     private void DeactivateAllStoryBlocks()
     {
         secondTruckFound.enabled = false;
@@ -69,19 +68,26 @@ public class AccidentContentManager : ContentManager
         secondTruckStops2.enabled = false;
     }
 
-    public override void Pause()
+    private void InitTrucks()
     {
-        if (state != State.Pause)
-        {
-            GetActiveContent().Pause();
-            lastState = state;
-            state = State.Pause;
-        }
-        else
-        {
-            state = lastState;
-            GetActiveContent().Pause();
-        }
+        FirstTruckActions first = firstTruck.GetComponent<FirstTruckActions>();
+        SecondTruckActions second = secondTruck.GetComponent<SecondTruckActions>();
+        TruckActionControl.AccidentPhaseInitSetup(first, second);
+    }
+
+    public override void EnterPause()
+    {
+        if (state == State.Pause) { return; }
+        GetActiveContent().Pause();
+        lastState = state;
+        state = State.Pause;
+    }
+
+    public override void ExitPause()
+    {
+        if (state != State.Pause) { return; }
+        state = lastState;
+        GetActiveContent().Pause();
     }
 
     private ContentSubBlock GetActiveContent()
@@ -213,7 +219,7 @@ public class AccidentContentManager : ContentManager
 
         MoveOnNextPhase();
     }
-
+    
     private void MoveOnNextPhase()
     {
         var phaseManager = GetComponentInParent<PhaseManager>();

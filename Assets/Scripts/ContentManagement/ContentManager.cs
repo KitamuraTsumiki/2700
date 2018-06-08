@@ -7,22 +7,50 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class ContentManager : MonoBehaviour {
 
-	public string nextPhase;
-	public bool sceneTransitionEnabled = false; // for test
+	public bool startFromPaused;
+    [SerializeField]
+    protected GameObject firstTruck;
+    [SerializeField]
+    protected GameObject secondTruck;
+    [SerializeField]
+    protected Transform cameraRig;
+    [SerializeField]
+    protected Transform initPlayerPos;
 
-	protected virtual void Start () {
-		
-	}
+    protected virtual void Start () {
+        
+    }
 
-    public virtual void Pause() {
+    /// <summary>
+    /// SetInitCamRigPos is called only beginning of instruction and replay phase.
+    /// it is called by PhaseManager or child class of this class.
+    /// </summary>
+    protected void SetInitCamRigPos() {
+        var simCamTransform = cameraRig.GetComponent<CameraTransform>();
+        if (simCamTransform == null)
+        {
+            cameraRig.position = initPlayerPos.position;
+            return;
+        }
+
+        // modification of camera height is for test without vive
+        float cameraRigHeight = 1.8f;
+        cameraRig.position = new Vector3(initPlayerPos.position.x, cameraRigHeight, initPlayerPos.position.z);
+        Debug.Log("camera rig has camera transform");
+    }
+
+    protected virtual void SetInitialState()
+    {
+        
+    }
+
+    public virtual void EnterPause()
+    {
 
     }
 
-	protected virtual void SceneSwitch(){
-		var switchScene = Input.GetKeyDown(KeyCode.A) && sceneTransitionEnabled;
-		if(switchScene) {
-			Debug.Log("A is pressed");
-			SceneManager.LoadScene(nextPhase);
-		}
-	}
+    public virtual void ExitPause()
+    {
+
+    }
 }

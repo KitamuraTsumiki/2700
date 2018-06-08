@@ -14,7 +14,9 @@ public class SecondTruckStops2 : ContentSubBlock {
 	private void Update () {
         if (!CheckDynamicObjectReference()) { return; }
 
-        SwitchDynamicObjectStatus();
+        ActivateDynamicObjectStatus();
+        DeactivateDynamicObjectStatus();
+
         if (!isActive) { return; }
         ActivateTruckActions();
 	}
@@ -35,9 +37,16 @@ public class SecondTruckStops2 : ContentSubBlock {
         base.Pause();
     }
 
-    protected override void SwitchDynamicObjectStatus()
+    protected override void ActivateDynamicObjectStatus()
     {
-        truckActions.isActive = isActive;
+        if (truckActions.isActive == isActive) { return; }
+        TruckActionControl.ActivateTruckAction(truckActions);
+    }
+
+    protected override void DeactivateDynamicObjectStatus()
+    {
+        if (truckActions.isActive == isActive) { return; }
+        TruckActionControl.DeactivateTruckAction(truckActions);
     }
 
     private void ActivateTruckActions(){
