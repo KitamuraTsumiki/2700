@@ -17,7 +17,6 @@
 		CGPROGRAM
 		// Physically based Standard lighting model, and enable shadows on all light types
 		#pragma surface surf Standard fullforwardshadows vert:vertex
-		//#pragma surface surf Standard fullforwardshadows
 
 		// Use shader model 3.0 target, to get nicer looking lighting
 		#pragma target 3.0
@@ -35,7 +34,6 @@
 		struct Input {
 			float2 uv_Al;
 			float2 uv2_Al_Sub;
-			
 		};
 
 		// Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
@@ -45,20 +43,21 @@
 			// put more per-instance properties here
 		UNITY_INSTANCING_BUFFER_END(Props)
 		
-		void surf (Input IN, inout SurfaceOutputStandard o) {
-			// Set Albedo
-			fixed4 c_tiling = tex2D (_Al, IN.uv_Al);
-			fixed4 c_sub = tex2D(_Al_Sub, IN.uv2_Al_Sub);
-			
-			o.Albedo = lerp(c_tiling.rgb, c_sub.rgb, _SubLerpVal);
 
-			// Set Metallic, Smoothness, Ambient Occlusion
+		void surf (Input IN, inout SurfaceOutputStandard o) {
+			// Set Metallic, Smoothness
 			half4 ms_tiling = tex2D(_MS, IN.uv_Al);
 			half4 mso_sub = tex2D(_MSO_Sub, IN.uv2_Al_Sub);
 
 			o.Metallic = lerp(ms_tiling.r, mso_sub.r, _SubLerpVal);
 			o.Smoothness = lerp(ms_tiling.g, 1 - mso_sub.g, _SubLerpVal);
-			o.Occlusion = lerp(1, mso_sub.b, _AOLerpVal);
+
+			// Set Albedo
+			fixed4 c_tiling = tex2D (_Al, IN.uv_Al);
+			fixed4 c_sub = tex2D(_Al_Sub, IN.uv2_Al_Sub);
+			fixed ao = lerp(1, mso_sub.b, _AOLerpVal);
+			
+			o.Albedo = lerp(c_tiling.rgb, c_sub.rgb, _SubLerpVal) * ao;
 
 			// Set Normal
 			fixed3 n_tiling = UnpackNormal(tex2D(_N, IN.uv_Al));
